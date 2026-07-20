@@ -1,0 +1,56 @@
+name: holy_quran
+description: A new Flutter project.
+publish_to: "none"
+
+version: 1.0.0
+
+environment:
+  sdk: ">=2.17.0 <4.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  flutter_launcher_icons: ^0.13.1
+  get: ^4.7.3
+  sizer: ^3.1.3
+  flutter_svg: ^2.2.0
+  shared_preferences: ^2.5.3
+
+  flutter_localizations:
+    sdk: flutter
+  easy_localization: ^3.0.8
+
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^4.0.0
+
+flutter_icons:
+  android: true
+  ios: true
+  remove_alpha_ios: true
+  image_path: "assets/Icons_Images/"
+    
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/Icons_Images/
+    - assets/translations/
+
+  fonts:
+    - family: InterBold
+      fonts:
+        - asset: assets/fonts/Inter-Bold.otf
+    - family: InterSemibold
+      fonts:
+        - asset: assets/fonts/Inter-SemiBold.otf
+    - family: InterMedium
+      fonts:
+        - asset: assets/fonts/Inter-Medium.otf
+    - family: InterRegular
+      fonts:
+        - asset: assets/fonts/Inter-Regular.otf
+
+
