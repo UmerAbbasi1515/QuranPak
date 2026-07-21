@@ -1,6 +1,8 @@
-import 'package:easy_localization/easy_localization.dart';
+import 'package:easy_localization/easy_localization.dart' as easy;
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart' as getx;
+import 'package:holy_quran/constant/app_labels.dart';
 import 'package:holy_quran/constant/assets_path.dart';
 import 'package:holy_quran/constant/style/app_colors.dart';
 import 'package:holy_quran/constant/style/app_styles.dart';
@@ -56,6 +58,7 @@ class _LanguageScreenState extends State<LanguageScreen> {
     });
 
     await context.setLocale(Locale(code));
+    getx.Get.updateLocale(Locale(code));
     await Future.delayed(const Duration(milliseconds: 200));
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString('language_code', code);
@@ -63,10 +66,7 @@ class _LanguageScreenState extends State<LanguageScreen> {
 
     if (!mounted) return;
 
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: (_) => const SplashScreen()),
-    );
+    getx.Get.offAll(() => const SplashScreen());
   }
 
   @override
@@ -100,7 +100,7 @@ class _LanguageScreenState extends State<LanguageScreen> {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Text(
-                        'select_lang'.tr(),
+                        easy.tr(AppLabels.selectLanguage),
                         style: TextStyle(
                           fontFamily: AppFonts.interBold,
                           fontSize: 18.sp,
@@ -128,7 +128,7 @@ class _LanguageScreenState extends State<LanguageScreen> {
                                 fontSize: 16,
                               ),
                               hint: Text(
-                                'select_language'.tr(),
+                                easy.tr(AppLabels.selectLanguage),
                                 style: const TextStyle(color: Colors.black),
                               ),
                               items: _languages.map((lang) {
