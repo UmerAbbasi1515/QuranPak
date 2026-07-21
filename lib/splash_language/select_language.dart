@@ -6,7 +6,7 @@ import 'package:holy_quran/constant/app_labels.dart';
 import 'package:holy_quran/constant/assets_path.dart';
 import 'package:holy_quran/constant/style/app_colors.dart';
 import 'package:holy_quran/constant/style/app_styles.dart';
-import 'package:holy_quran/splash_screen.dart';
+import 'package:holy_quran/splash_language/splash_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizer/sizer.dart';
 
