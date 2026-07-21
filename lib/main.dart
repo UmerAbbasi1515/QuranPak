@@ -1,4 +1,5 @@
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:holy_quran/select_language.dart';
@@ -7,6 +8,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizer/sizer.dart';
 
 Future<void> main() async {
+  if (kDebugMode) {
+    print('Bismillah');
+  }
   WidgetsFlutterBinding.ensureInitialized();
   await EasyLocalization.ensureInitialized();
   final prefs = await SharedPreferences.getInstance();
