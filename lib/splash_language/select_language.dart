@@ -7,6 +7,7 @@ import 'package:holy_quran/constant/assets_path.dart';
 import 'package:holy_quran/constant/style/app_colors.dart';
 import 'package:holy_quran/constant/style/app_styles.dart';
 import 'package:holy_quran/splash_language/splash_screen.dart';
+import 'package:holy_quran/widgets/top_mosque_widget.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizer/sizer.dart';
 
@@ -80,22 +81,16 @@ class _LanguageScreenState extends State<LanguageScreen> {
           child: Stack(
             children: [
               // Top image
-              Positioned(
-                top: 3.h,
-                left: 0.5.w,
-                right: 0.5.w,
-                child: SvgPicture.asset(
-                  AppImagesPath.mosqueWithBorder,
-                  fit: BoxFit.contain,
-                  width: 100.w,
-                ),
+              TopMosqueWidget(
+                top: 5.h,
+                left: 0,
+                right: 0,
               ),
 
-              // Center dropdown for language selection
               Align(
                 alignment: Alignment.center,
                 child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 8.w),
+                  padding: EdgeInsets.symmetric(horizontal: 0.w),
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [

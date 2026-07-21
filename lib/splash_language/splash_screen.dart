@@ -10,6 +10,7 @@ import 'package:holy_quran/constant/style/app_colors.dart';
 import 'package:holy_quran/constant/style/app_styles.dart';
 import 'package:holy_quran/splash_language/select_language.dart';
 import 'package:holy_quran/widgets/button_widget.dart';
+import 'package:holy_quran/widgets/top_mosque_widget.dart';
 import 'package:sizer/sizer.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -57,14 +58,10 @@ class _SplashScreenState extends State<SplashScreen>
                       height: 100.h,
                       child: Stack(
                         children: [
-                          Positioned(
+                          TopMosqueWidget(
                             top: 5.h,
-                            left: 1.w,
-                            right: 1.w,
-                            child: SvgPicture.asset(
-                              AppImagesPath.bismillahMosque,
-                              fit: BoxFit.contain,
-                            ),
+                            left: 0,
+                            right: 0,
                           ),
                           Positioned(
                             top: 25.h,
@@ -184,3 +181,4 @@ class _SplashScreenState extends State<SplashScreen>
     );
   }
 }
+

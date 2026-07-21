@@ -31,6 +31,14 @@ class AppColors {
     end: Alignment.bottomCenter,
     colors: [goldGradientTop, goldGradientBottom],
   );
+
+  static const Color brownGradientTop = Color(0xFF4E131A);
+  static const Color brownGradientBottom = Color(0xFF350B11);
+  static const LinearGradient brownGradient = LinearGradient(
+    begin: Alignment.topCenter,
+    end: Alignment.bottomCenter,
+    colors: [brownGradientTop, brownGradientBottom],
+  );
 }
 
 class AppShadows {

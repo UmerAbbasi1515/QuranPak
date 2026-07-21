@@ -3,6 +3,7 @@ class AppImagesPath {
   static const String commonRoot = 'assets/Icons_Images/';
   static const String bismillah = '${commonRoot}bismilAllah.svg';
   static const String quranKareem = '${commonRoot}quranKareem.svg';
+  static const String quranPak = '${commonRoot}quranPak.svg';
   static const String group = '${commonRoot}Group 52572.svg';
   static const String mosque = '${commonRoot}mosque.svg';
   static const String mosqueWithBorder = '${commonRoot}mosqueWithBorder.svg';

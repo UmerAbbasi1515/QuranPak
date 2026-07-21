@@ -36,7 +36,7 @@ class QuransDashboardTabsState extends State<QuransDashboardTabs> {
   @override
   Widget build(BuildContext context) {
     _buildScreens = [
-      Container(
+      SizedBox(
         width: 100.w,
         // decoration: const BoxDecoration(gradient: AppColors.backgroundColor),
         child: const Center(child: Text("Home")),
