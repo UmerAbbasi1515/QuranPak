@@ -18,15 +18,9 @@ class CustomNavBar extends StatelessWidget {
       width: 100.w,
       padding: EdgeInsets.only(top: 1.0.h, bottom: 1.0.h),
       decoration: BoxDecoration(
-        color: Colors.white,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black12,
-            blurRadius: 1.0.h,
-            spreadRadius: 0.1.h,
-            offset: const Offset(0, -10),
-          ),
-        ],
+        borderRadius: BorderRadius.vertical(top: Radius.circular(1.5.h)),
+        color: AppColors.maroon,
+        boxShadow: const [AppShadows.topBlackShadow],
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -99,10 +93,11 @@ class NavBarItem extends StatelessWidget {
             height: 1.h,
           ),
           Text(
-            title??"",
+            title ?? "",
             style: TextStyle(
+              color: AppColors.white,
               fontFamily: AppFonts.interRegular,
-              fontSize: 12.sp,
+              fontSize: 13.sp,
             ),
           )
         ],
