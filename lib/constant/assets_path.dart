@@ -14,4 +14,5 @@ class AppImagesPath {
   static const String home = '${commonRoot}home.svg';
   static const String bookmark = '${commonRoot}bookmark.svg';
   static const String settings = '${commonRoot}settings.svg';
+  static const String stars = '${commonRoot}stars.svg';
 }

@@ -2,9 +2,7 @@ import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:holy_quran/splash_language/select_language.dart';
-import 'package:holy_quran/splash_language/splash_screen.dart';
-import 'package:holy_quran/widgets.dart';
+import 'package:holy_quran/quran_dashboard/quran_dashboard_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizer/sizer.dart';
 
@@ -77,7 +75,7 @@ class _MyAppState extends State<MyApp> {
               snackBarTheme:
                   const SnackBarThemeData(backgroundColor: Colors.white54),
             ),
-            home: const WidgetOfProject()
+            home: const QuransDashboardTabs()
             // home: widget.languageSelected
             //     ? const SplashScreen()
             //     : const LanguageScreen()

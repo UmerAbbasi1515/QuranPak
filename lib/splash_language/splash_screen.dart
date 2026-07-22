@@ -3,7 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart' as getx;
-import 'package:holy_quran/quran_navgationbar/quran_navbar_screen.dart';
+import 'package:holy_quran/quran_dashboard/quran_dashboard_screen.dart';
 import 'package:holy_quran/constant/app_labels.dart';
 import 'package:holy_quran/constant/assets_path.dart';
 import 'package:holy_quran/constant/style/app_colors.dart';

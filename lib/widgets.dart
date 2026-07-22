@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:holy_quran/constant/app_labels.dart';
@@ -26,7 +27,7 @@ class _WidgetOfProjectState extends State<WidgetOfProject> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               DashboardGridWidget(
-                height: 12.h,
+                height: 13.h,
                 width: 10.h,
                 radius: 2.h,
                 gradient: AppColors.brownGradient,
@@ -35,7 +36,161 @@ class _WidgetOfProjectState extends State<WidgetOfProject> {
                 title: AppLabels.appName,
                 subTitle: AppLabels.appName,
               ),
+              SizedBox(
+                height: 0.5.h,
+              ),
+              SearchBarWidget(
+                onPressed: () {
+                  if (kDebugMode) {
+                    print('Voice');
+                  }
+                },
+              ),
+              SizedBox(
+                height: 0.5.h,
+              ),
+              Container(
+                  width: 90.w,
+                  height: 10.h,
+                  decoration: BoxDecoration(
+                    gradient: AppColors.brownGradient,
+                    border: Border.all(
+                      color: AppColors.goldTan,
+                      width: 1,
+                    ),
+                    borderRadius: BorderRadius.circular(
+                      1.h,
+                    ),
+                  ),
+                  child: Row(
+                    children: [
+                      SizedBox(
+                        width: 3.w,
+                      ),
+                      Stack(
+                        children: [
+                          SvgPicture.asset(
+                            AppImagesPath.stars,
+                            height: 6.h,
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(top: 1.6.h,left: 5.3.w),
+                            child: Text(
+                              "1",
+                              style: TextStyle(
+                                fontFamily: AppFonts.interBold,
+                                fontSize: 16.sp,
+                                color: AppColors.white,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      Padding(
+                        padding:
+                            EdgeInsets.only(top: 1.h, bottom: 2.5.h, left: 3.w),
+                        child: Column(
+                          spacing: 0.0,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text(
+                              easy.tr(AppLabels.para),
+                              style: TextStyle(
+                                fontFamily: AppFonts.interRegular,
+                                fontSize: 18.sp,
+                                color: AppColors.white,
+                              ),
+                            ),
+                            Text(
+                              easy.tr(AppLabels.para),
+                              style: TextStyle(
+                                fontFamily: AppFonts.interRegular,
+                                fontSize: 14.sp,
+                                color: AppColors.white,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const Spacer(),
+                      Padding(
+                        padding: EdgeInsets.only(bottom: 0.h, left: 3.w),
+                        child: Text(
+                          easy.tr(SurahNames.arabic.first),
+                          style: TextStyle(
+                            fontFamily: AppFonts.interBold,
+                            fontSize: 20.sp,
+                            color: AppColors.white,
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        width: 2.w,
+                      ),
+                      Icon(
+                        Icons.arrow_forward_ios_outlined,
+                        color: AppColors.goldTan,
+                        size: 2.h,
+                      ),
+                      SizedBox(
+                        width: 3.w,
+                      ),
+                    ],
+                  ))
             ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class SearchBarWidget extends StatelessWidget {
+  final Function()? onPressed;
+  const SearchBarWidget({
+    super.key,
+    @required this.onPressed,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 90.w,
+      height: 5.h,
+      decoration: BoxDecoration(
+        gradient: AppColors.brownGradient,
+        border: Border.all(
+          color: AppColors.goldTan,
+          width: 1,
+        ),
+        borderRadius: BorderRadius.circular(1.h),
+      ),
+      child: TextField(
+        cursorColor: AppColors.white,
+        decoration: InputDecoration(
+          hintText: 'Search',
+          hintStyle: TextStyle(
+              color: AppColors.white,
+              fontFamily: AppFonts.interRegular,
+              fontSize: 14.sp),
+          prefixIcon: const Icon(
+            Icons.search,
+            color: AppColors.goldTan,
+          ),
+          suffixIcon: IconButton(
+            icon: const Icon(
+              Icons.mic,
+              color: AppColors.goldTan,
+            ),
+            onPressed: onPressed,
+          ),
+          filled: true,
+          fillColor: Colors.transparent,
+          contentPadding:
+              const EdgeInsets.symmetric(vertical: 1, horizontal: 1),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(30),
+            borderSide: BorderSide.none,
           ),
         ),
       ),
