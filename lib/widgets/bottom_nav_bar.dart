@@ -22,10 +22,13 @@ class CustomNavBar extends StatelessWidget {
         color: AppColors.maroon,
         boxShadow: const [AppShadows.topBlackShadow],
       ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: items!,
+      child: SizedBox(
+        width: 100.w,
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: items!,
+        ),
       ),
     );
   }
@@ -62,9 +65,7 @@ class NavBarItem extends StatelessWidget {
                     backgroundColor: AppColors.maroon,
                     child: SvgPicture.asset(
                       AppImagesPath.home,
-                      fit: BoxFit.fill,
-                      width: double.infinity,
-                      height: 10.h,
+                      fit: BoxFit.contain,
                     ),
                   ),
                 )
@@ -77,17 +78,17 @@ class NavBarItem extends StatelessWidget {
                         backgroundColor: Colors.white,
                         child: SvgPicture.asset(
                           AppImagesPath.home,
-                          fit: BoxFit.fill,
-                          width: double.infinity,
-                          height: 10.h,
+                          fit: BoxFit.contain,
                         ),
                       ),
                     )
-                  : SvgPicture.asset(
-                      AppImagesPath.home,
-                      fit: BoxFit.fill,
-                      width: double.infinity,
+                  : SizedBox(
                       height: 2.h,
+                      width: 5.h,
+                      child: SvgPicture.asset(
+                        AppImagesPath.home,
+                        fit: BoxFit.contain,
+                      ),
                     ),
           SizedBox(
             height: 1.h,

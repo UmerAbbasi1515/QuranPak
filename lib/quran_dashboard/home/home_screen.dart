@@ -21,64 +21,147 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       body: SingleChildScrollView(
         child: ConstrainedBox(
-          constraints: BoxConstraints(minHeight: 100.h),
+          constraints: BoxConstraints(minHeight: 90.h),
           child: Container(
             decoration:
                 const BoxDecoration(gradient: AppColors.backgroundColor),
             child: Column(
               children: [
-                SizedBox(height: 5
-                .h),
-                Padding(
-                  padding: EdgeInsets.only(left: 3.w, right: 3.w, top: 4.w),
-                  child: Row(
-                    children: [
-                      Column(
-                        spacing: 0.0,
-                        mainAxisSize: MainAxisSize.min,
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            easy.tr(AppLabels.welcome),
-                            style: TextStyle(
-                              fontFamily: AppFonts.interRegular,
-                              fontSize: 13.sp,
-                              color: AppColors.white,
+                Stack(
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.only(left: 2.w, right: 2.w, top: 2.h),
+                      child: SizedBox(
+                        width: 100.w,
+                        child: Row(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Column(
+                                spacing: 0.0,
+                                mainAxisSize: MainAxisSize.min,
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    easy.tr(AppLabels.welcome),
+                                    style: TextStyle(
+                                      fontFamily: AppFonts.interRegular,
+                                      fontSize: 13.sp,
+                                      color: AppColors.white,
+                                    ),
+                                  ),
+                                  Text(
+                                    easy.tr(AppLabels.appName),
+                                    style: TextStyle(
+                                      fontFamily: AppFonts.interRegular,
+                                      fontSize: 17.sp,
+                                      color: AppColors.goldTan,
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
-                          ),
-                          Text(
-                            easy.tr(AppLabels.appName),
-                            style: TextStyle(
-                              fontFamily: AppFonts.interRegular,
-                              fontSize: 17.sp,
-                              color: AppColors.goldTan,
+                            const Spacer(),
+                            SizedBox(
+                              width: 10.w,
+                              child: SvgPicture.asset(
+                                AppImagesPath.king,
+                                fit: BoxFit.fill,
+                                width: double.infinity,
+                                height: 3.h,
+                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
-                      const Spacer(),
-                      SvgPicture.asset(
-                        AppImagesPath.king,
-                        fit: BoxFit.fill,
-                        width: double.infinity,
-                        height: 3.h,
+                    ),
+                    Padding(
+                      padding: EdgeInsets.only(left: 1.w, right: 1.w, top: 5.h),
+                      child: const TopMosqueWidget(),
+                    ),
+                    Padding(
+                      padding:
+                          EdgeInsets.only(left: 1.w, right: 1.w, top: 22.h),
+                      child: SvgPicture.asset(
+                        AppImagesPath.masgids,
+                        fit: BoxFit.contain,
+                        width: 100.w,
+                      ),
+                    )
+                  ],
+                ),
+                Container(
+                  height: 20.h,
+                  width: 90.w,
+                  decoration: BoxDecoration(
+                    gradient: AppColors.brownGradient,
+                    border: Border.all(
+                      color: AppColors.goldTan,
+                      width: 2,
+                    ),
+                    borderRadius: BorderRadius.circular(4.w),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Expanded(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              easy.tr(AppLabels.addNewBookmark),
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontFamily: AppFonts.interBold,
+                                fontSize: 14.sp,
+                                color: AppColors.white,
+                              ),
+                            ),
+                            Text(
+                              easy.tr(AppLabels.welcome),
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontFamily: AppFonts.interRegular,
+                                fontSize: 12.sp,
+                                color: AppColors.white,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Expanded(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Transform(
+                              transform:
+                                  Matrix4.translationValues(0, -8.h, 0),
+                              alignment: Alignment.center,
+                              child: SizedBox(
+                                height: 12.h,
+                                width: 12.h,
+                                child: SvgPicture.asset(
+                                  AppImagesPath.quranPak,
+                                  fit: BoxFit.contain,
+                                ),
+                              ),
+                            ),
+                            Text(
+                              easy.tr(AppLabels.welcome),
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontFamily: AppFonts.interRegular,
+                                fontSize: 12.sp,
+                                color: AppColors.white,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ],
                   ),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(
-                    top: 5.h,
-                    left: 2.w,
-                    right: 1.w,
-                  ),
-                  child: TopMosqueWidget(
-                    top: 0.h,
-                    left: 2.w,
-                    right: 1.w,
-                  ),
-                ),
+                )
               ],
             ),
           ),

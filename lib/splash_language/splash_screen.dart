@@ -47,7 +47,7 @@ class _SplashScreenState extends State<SplashScreen>
           children: [
             Container(
               width: double.infinity,
-              height: double.infinity,
+              height: 100.h,
               decoration: const BoxDecoration(
                 gradient: AppColors.backgroundColor,
               ),
@@ -58,10 +58,10 @@ class _SplashScreenState extends State<SplashScreen>
                       height: 100.h,
                       child: Stack(
                         children: [
-                          TopMosqueWidget(
-                            top: 5.h,
-                            left: 0,
-                            right: 0,
+                          Padding(
+                            padding: EdgeInsets.only(
+                                top: 5.h, left: 0.5.h, right: 0.5.h),
+                            child: const TopMosqueWidget(),
                           ),
                           Positioned(
                             top: 25.h,
@@ -181,4 +181,3 @@ class _SplashScreenState extends State<SplashScreen>
     );
   }
 }
-

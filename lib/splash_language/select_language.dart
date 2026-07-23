@@ -81,10 +81,9 @@ class _LanguageScreenState extends State<LanguageScreen> {
           child: Stack(
             children: [
               // Top image
-              TopMosqueWidget(
-                top: 5.h,
-                left: 0,
-                right: 0,
+              Padding(
+                padding: EdgeInsets.only(top: 5.h, left: 0.5.h, right: 0.5.h),
+                child: const TopMosqueWidget(),
               ),
 
               Align(

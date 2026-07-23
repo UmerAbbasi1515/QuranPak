@@ -6,6 +6,7 @@ import 'package:holy_quran/constant/style/app_colors.dart';
 import 'package:holy_quran/quran_dashboard/home/home_screen.dart';
 import 'package:holy_quran/quran_dashboard/quran_dashboard_controller.dart';
 import 'package:holy_quran/widgets/bottom_nav_bar.dart';
+import 'package:sizer/sizer.dart';
 
 class QuransDashboardTabs extends StatefulWidget {
   final int? initialIndex;
@@ -60,6 +61,7 @@ class QuransDashboardTabsState extends State<QuransDashboardTabs> {
             child: Container(
               decoration:
                   const BoxDecoration(gradient: AppColors.backgroundColor),
+                  height: 100.h,
               child: Column(
                 children: [
                   Expanded(

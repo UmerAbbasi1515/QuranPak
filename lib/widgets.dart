@@ -67,24 +67,27 @@ class _WidgetOfProjectState extends State<WidgetOfProject> {
                       SizedBox(
                         width: 3.w,
                       ),
-                      Stack(
-                        children: [
-                          SvgPicture.asset(
-                            AppImagesPath.stars,
-                            height: 6.h,
-                          ),
-                          Padding(
-                            padding: EdgeInsets.only(top: 1.6.h,left: 5.3.w),
-                            child: Text(
-                              "1",
-                              style: TextStyle(
-                                fontFamily: AppFonts.interBold,
-                                fontSize: 16.sp,
-                                color: AppColors.white,
+                      SizedBox(
+                        width: 10.w,
+                        child: Stack(
+                          children: [
+                            SvgPicture.asset(
+                              AppImagesPath.stars,
+                              height: 6.h,
+                            ),
+                            Padding(
+                              padding: EdgeInsets.only(top: 1.6.h,left: 5.3.w),
+                              child: Text(
+                                "1",
+                                style: TextStyle(
+                                  fontFamily: AppFonts.interBold,
+                                  fontSize: 16.sp,
+                                  color: AppColors.white,
+                                ),
                               ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                       Padding(
                         padding:
