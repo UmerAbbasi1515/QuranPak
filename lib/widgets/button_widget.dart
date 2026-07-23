@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sizer/sizer.dart';
 
 class ColorButtonWidget extends StatelessWidget {
   final double btnheight;
@@ -8,6 +9,7 @@ class ColorButtonWidget extends StatelessWidget {
   final Color fontColor;
   final String fontFamily;
   final Gradient gradient;
+  final bool? isIcons;
   const ColorButtonWidget({
     super.key,
     required this.btnText,
@@ -17,6 +19,7 @@ class ColorButtonWidget extends StatelessWidget {
     required this.fontColor,
     required this.fontFamily,
     required this.gradient,
+    this.isIcons,
   });
 
   @override
@@ -28,17 +31,43 @@ class ColorButtonWidget extends StatelessWidget {
       ),
       height: btnheight,
       width: btnWidth,
-      child: Align(
-        alignment: Alignment.center,
-        child: Text(
-          btnText,
-          style: TextStyle(
-            fontFamily: fontFamily,
-            fontSize: fontSize,
-            color: fontColor,
-          ),
-        ),
-      ),
+      child: isIcons == false
+          ? Align(
+              alignment: Alignment.center,
+              child: Text(
+                btnText,
+                style: TextStyle(
+                  fontFamily: fontFamily,
+                  fontSize: fontSize,
+                  color: fontColor,
+                ),
+              ),
+            )
+          : Row(
+              children: [
+                const Spacer(),
+                Padding(
+                  padding: EdgeInsets.only(left: 2.w),
+                  child: Align(
+                    alignment: Alignment.center,
+                    child: Text(
+                      btnText,
+                      style: TextStyle(
+                        fontFamily: fontFamily,
+                        fontSize: fontSize,
+                        color: fontColor,
+                      ),
+                    ),
+                  ),
+                ),
+                const Spacer(),
+                Icon(
+                  Icons.arrow_forward_ios,
+                  size: 2.h,
+                ),
+                const Spacer(),
+              ],
+            ),
     );
   }
 }

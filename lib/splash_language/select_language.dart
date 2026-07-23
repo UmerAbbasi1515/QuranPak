@@ -83,7 +83,8 @@ class _LanguageScreenState extends State<LanguageScreen> {
               // Top image
               Padding(
                 padding: EdgeInsets.only(top: 5.h, left: 0.5.h, right: 0.5.h),
-                child: const TopMosqueWidget(),
+                child:
+                    const TopMosqueWidget(image: AppImagesPath.bismillahMosque),
               ),
 
               Align(

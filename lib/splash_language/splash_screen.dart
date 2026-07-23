@@ -61,7 +61,8 @@ class _SplashScreenState extends State<SplashScreen>
                           Padding(
                             padding: EdgeInsets.only(
                                 top: 5.h, left: 0.5.h, right: 0.5.h),
-                            child: const TopMosqueWidget(),
+                            child: const TopMosqueWidget(
+                                image: AppImagesPath.bismillahMosque),
                           ),
                           Positioned(
                             top: 25.h,
