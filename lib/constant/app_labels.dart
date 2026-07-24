@@ -41,7 +41,7 @@ class AppLabels {
   static const String previous = 'previous';
   static const String next = 'next';
   static const String autoscroll = 'autoscroll';
-  static const String readyByParas = readBy + paras;
+  static const String readyByParas = '$readBy $paras';
   static const String readyBySurah = readBy + paras;
 
 

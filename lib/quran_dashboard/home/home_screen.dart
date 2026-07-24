@@ -1,11 +1,16 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
 import 'package:holy_quran/constant/app_labels.dart';
 import 'package:holy_quran/constant/assets_path.dart';
 import 'package:holy_quran/constant/style/app_colors.dart';
 import 'package:holy_quran/constant/style/app_styles.dart';
-import 'package:holy_quran/widgets.dart';
+import 'package:holy_quran/quran_dashboard/home/parah_screen.dart';
+import 'package:holy_quran/quran_dashboard/home/surah_screen.dart';
 import 'package:holy_quran/widgets/button_widget.dart';
+import 'package:holy_quran/widgets/dashboard_grid_widget.dart';
 import 'package:holy_quran/widgets/top_mosque_widget.dart';
 import 'package:sizer/sizer.dart';
 import 'package:easy_localization/easy_localization.dart' as easy;
@@ -64,7 +69,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 Stack(
                   children: [
                     Padding(
-                      padding: EdgeInsets.only(left: 2.w, right: 2.w, top: 2.h),
+                      padding: EdgeInsets.only(left: 2.w, right: 4.w, top: 2.h),
                       child: SizedBox(
                         width: 100.w,
                         child: Row(
@@ -98,12 +103,12 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                             const Spacer(),
                             SizedBox(
-                              width: 10.w,
+                              width: 5.w,
                               child: SvgPicture.asset(
                                 AppImagesPath.king,
                                 fit: BoxFit.fill,
                                 width: double.infinity,
-                                height: 3.h,
+                                height: 2.h,
                               ),
                             ),
                           ],
@@ -185,7 +190,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Transform(
-                            transform: Matrix4.translationValues(0, -6.h, 0),
+                            transform: Matrix4.translationValues(0, -5.h, 0),
                             child: SvgPicture.asset(
                               AppImagesPath.quranPak,
                               fit: BoxFit.fill,
@@ -221,15 +226,26 @@ class _HomeScreenState extends State<HomeScreen> {
                     childAspectRatio: 0.85,
                   ),
                   itemBuilder: (context, index) {
-                    return DashboardGridWidget(
-                      height: 13.h,
-                      width: 10.h,
-                      radius: 2.h,
-                      gradient: AppColors.brownGradient,
-                      borderColor: AppColors.goldTan,
-                      image: homeGridItems[index].image,
-                      title: homeGridItems[index].title,
-                      subTitle: homeGridItems[index].subtitle,
+                    return InkWell(
+                      onTap: () {
+                        if (index == 0) {
+                          Get.to(() => const ParahsScreen());
+                        } else if (index == 1) {
+                          Get.to(() => const SurahsScreen());
+                        } else if (index == 2) {
+                          showBlurPopup(context);
+                        }
+                      },
+                      child: DashboardGridWidget(
+                        height: 13.h,
+                        width: 10.h,
+                        radius: 2.h,
+                        gradient: AppColors.brownGradient,
+                        borderColor: AppColors.goldTan,
+                        image: homeGridItems[index].image,
+                        title: homeGridItems[index].title,
+                        subTitle: homeGridItems[index].subtitle,
+                      ),
                     );
                   },
                 )
@@ -238,6 +254,73 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
       ),
+    );
+  }
+
+  void showBlurPopup(BuildContext context) {
+    showGeneralDialog(
+      context: context,
+      barrierDismissible: true,
+      barrierLabel: "Popup",
+      barrierColor: Colors.transparent,
+      transitionDuration: const Duration(milliseconds: 300),
+      pageBuilder: (context, animation, secondaryAnimation) {
+        return Stack(
+          children: [
+            // Blur Background
+            BackdropFilter(
+              filter: ImageFilter.blur(sigmaX: 6, sigmaY: 6),
+              child: Container(
+                color: Colors.black12,
+              ),
+            ),
+
+            // Center Popup
+            Center(
+              child: Container(
+                width: 80.w,
+                height: 50.h,
+                color: Colors.black12,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(0),
+                  child: Stack(
+                    fit: StackFit.expand,
+                    children: [
+                      SvgPicture.asset(
+                        AppImagesPath.popup,
+                        fit: BoxFit.cover,
+                        height: 40.h,
+                      ),
+                      SvgPicture.asset(
+                        AppImagesPath.popupqurantasbi,
+                        height: 4.h,
+                      ),
+                      Text(
+                        easy.tr(SurahNames.arabic[0]),
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontFamily: AppFonts.interBold,
+                          fontSize: 22.sp,
+                          color: AppColors.goldTan,
+                        ),
+                      ),
+                      Text(
+                        easy.tr("Al-Fatihah"),
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontFamily: AppFonts.interBold,
+                          fontSize: 18.sp,
+                          color: AppColors.white,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 }
