@@ -24,6 +24,9 @@ class AppImagesPath {
   static const String features = '${commonRoot}features.svg';
   static const String popup = '${commonRoot}popup.svg';
   static const String popupitem = '${commonRoot}popupitem.svg';
-  static const String popupquranbookmark = '${commonRoot}popupquranbookmark.svg';
+  static const String popupquranbookmark =
+      '${commonRoot}popupquranbookmark.svg';
   static const String popupqurantasbi = '${commonRoot}popupqurantasbi.svg';
+  static const String frame = '${commonRoot}framee.svg';
+  static const String testing = '${commonRoot}testing.svg';
 }

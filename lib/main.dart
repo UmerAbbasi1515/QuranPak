@@ -10,6 +10,7 @@ Future<void> main() async {
   if (kDebugMode) {
     print('Bismillah');
   }
+
   WidgetsFlutterBinding.ensureInitialized();
   await EasyLocalization.ensureInitialized();
   final prefs = await SharedPreferences.getInstance();

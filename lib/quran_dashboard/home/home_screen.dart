@@ -26,18 +26,18 @@ class _HomeScreenState extends State<HomeScreen> {
   final List<GridItemData> homeGridItems = [
     GridItemData(
       image: AppImagesPath.quranPak,
-      title: easy.tr(AppLabels.paras).toString(),
-      subtitle: easy.tr(AppLabels.readyByParas).toString(),
+      title: easy.tr('Paras').toString(),
+      subtitle: easy.tr('Read By Parahs').toString(),
     ),
     GridItemData(
       image: AppImagesPath.surahsIm,
-      title: easy.tr(AppLabels.paras).toString(),
-      subtitle: easy.tr(AppLabels.readyByParas).toString(),
+      title: easy.tr('Surahs').toString(),
+      subtitle: easy.tr('Read By Surahs').toString(),
     ),
     GridItemData(
       image: AppImagesPath.gotopage,
       title: easy.tr(AppLabels.goToPage).toString(),
-      subtitle: easy.tr("${AppLabels.jumpTo} ${AppLabels.page}").toString(),
+      subtitle: easy.tr("${'Jump to the'} ${AppLabels.page}").toString(),
     ),
     GridItemData(
       image: AppImagesPath.bookmarkN,
@@ -154,11 +154,11 @@ class _HomeScreenState extends State<HomeScreen> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                easy.tr(SurahNames.arabic[0]),
+                                'Alif Lam Meem',
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                   fontFamily: AppFonts.interBold,
-                                  fontSize: 22.sp,
+                                  fontSize: 19.sp,
                                   color: AppColors.goldTan,
                                 ),
                               ),
@@ -296,11 +296,11 @@ class _HomeScreenState extends State<HomeScreen> {
                         height: 4.h,
                       ),
                       Text(
-                        easy.tr(SurahNames.arabic[0]),
+                        'Alif Lam Meem',
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           fontFamily: AppFonts.interBold,
-                          fontSize: 22.sp,
+                          fontSize: 12.sp,
                           color: AppColors.goldTan,
                         ),
                       ),
