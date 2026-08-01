@@ -8,7 +8,7 @@ import 'package:holy_quran/ui/widgets/app_card.dart';
 import 'package:holy_quran/ui/widgets/list_tiles.dart';
 
 /// App-wide preferences: reading, appearance and interface language.
-class SettingsScreen extends StatelessWidget {
+class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
 
   /// Interface languages that have a file in `assets/translations`.
@@ -27,6 +27,14 @@ class SettingsScreen extends StatelessWidget {
     'sw': 'Kiswahili',
   };
 
+  @override
+  State<SettingsScreen> createState() => _SettingsScreenState();
+
+  static String _currentLanguage(BuildContext context) =>
+      easy.EasyLocalization.of(context)?.locale.languageCode ?? 'en';
+}
+
+class _SettingsScreenState extends State<SettingsScreen> {
   @override
   Widget build(BuildContext context) {
     final palette = context.palette;
@@ -49,7 +57,7 @@ class SettingsScreen extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 18),
-              const SectionHeader(title: 'Reading'),
+              SectionHeader(title: easy.tr('reading')),
               const SizedBox(height: 10),
               AppCard(
                 padding: const EdgeInsets.symmetric(
@@ -60,15 +68,19 @@ class SettingsScreen extends StatelessWidget {
                   children: [
                     _Row(
                       icon: Icons.translate_rounded,
-                      title: 'Translation',
+                      title: easy.tr('translation'),
                       subtitle: prefs.translation.label,
-                      onTap: () => showTranslationPicker(context),
+                      onTap: () async {
+                        await showTranslationPicker(context);
+                        Get.forceAppUpdate();
+                        setState(() {});
+                      },
                     ),
                     _Divider(),
                     _Row(
                       icon: Icons.subtitles_rounded,
-                      title: 'Show translation',
-                      subtitle: 'Display the meaning under each verse',
+                      title: easy.tr('showTranslation'),
+                      subtitle: easy.tr('displayMeaningUnderVerse'),
                       trailing: Switch.adaptive(
                         value: prefs.showTranslation.value,
                         onChanged: prefs.setShowTranslation,
@@ -78,7 +90,7 @@ class SettingsScreen extends StatelessWidget {
                     ),
                     _Divider(),
                     _SliderRow(
-                      title: 'Arabic text size',
+                      title: easy.tr('arabicTextSize'),
                       value: prefs.arabicFontSize.value,
                       min: AppPrefs.minArabicFontSize,
                       max: AppPrefs.maxArabicFontSize,
@@ -86,7 +98,7 @@ class SettingsScreen extends StatelessWidget {
                     ),
                     _Divider(),
                     _SliderRow(
-                      title: 'Translation text size',
+                      title: easy.tr('translationTextSize'),
                       value: prefs.translationFontSize.value,
                       min: AppPrefs.minTranslationFontSize,
                       max: AppPrefs.maxTranslationFontSize,
@@ -96,7 +108,7 @@ class SettingsScreen extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 22),
-              const SectionHeader(title: 'Appearance'),
+              SectionHeader(title: easy.tr('appearance')),
               const SizedBox(height: 10),
               AppCard(
                 padding: const EdgeInsets.all(16),
@@ -104,7 +116,7 @@ class SettingsScreen extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Theme',
+                      easy.tr('theme'),
                       style: TextStyle(
                         fontFamily: 'InterMedium',
                         fontSize: 14,
@@ -113,7 +125,11 @@ class SettingsScreen extends StatelessWidget {
                     ),
                     const SizedBox(height: 10),
                     SegmentedTabs(
-                      labels: const ['System', 'Light', 'Dark'],
+                      labels: [
+                        easy.tr('system'),
+                        easy.tr('light'),
+                        easy.tr('dark')
+                      ],
                       selectedIndex: ThemeMode.values
                           .indexOf(prefs.themeMode.value)
                           .clamp(0, 2),
@@ -124,7 +140,7 @@ class SettingsScreen extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 22),
-              const SectionHeader(title: 'App language'),
+              SectionHeader(title: easy.tr('appLanguage')),
               const SizedBox(height: 10),
               AppCard(
                 padding: const EdgeInsets.symmetric(
@@ -133,14 +149,15 @@ class SettingsScreen extends StatelessWidget {
                 ),
                 child: _Row(
                   icon: Icons.language_rounded,
-                  title: 'Interface language',
-                  subtitle: _appLanguages[_currentLanguage(context)] ??
-                      _currentLanguage(context),
+                  title: easy.tr('interfaceLanguage'),
+                  subtitle: SettingsScreen._appLanguages[
+                          SettingsScreen._currentLanguage(context)] ??
+                      SettingsScreen._currentLanguage(context),
                   onTap: () => _pickAppLanguage(context),
                 ),
               ),
               const SizedBox(height: 22),
-              const SectionHeader(title: 'About'),
+              SectionHeader(title: easy.tr('about')),
               const SizedBox(height: 10),
               AppCard(
                 padding: const EdgeInsets.all(16),
@@ -157,8 +174,7 @@ class SettingsScreen extends StatelessWidget {
                     ),
                     const SizedBox(height: 6),
                     Text(
-                      'Arabic text, translations and page/juz data are bundled '
-                      'with the app and work fully offline.',
+                      easy.tr('offlineDataNote'),
                       style: TextStyle(
                         fontFamily: 'InterRegular',
                         fontSize: 13,
@@ -175,9 +191,6 @@ class SettingsScreen extends StatelessWidget {
       ),
     );
   }
-
-  static String _currentLanguage(BuildContext context) =>
-      easy.EasyLocalization.of(context)?.locale.languageCode ?? 'en';
 
   Future<void> _pickAppLanguage(BuildContext context) async {
     final palette = context.palette;
@@ -212,7 +225,7 @@ class SettingsScreen extends StatelessWidget {
                 controller: scrollController,
                 padding: const EdgeInsets.fromLTRB(16, 0, 16, 24),
                 children: [
-                  for (final entry in _appLanguages.entries)
+                  for (final entry in SettingsScreen._appLanguages.entries)
                     Container(
                       margin: const EdgeInsets.only(bottom: 8),
                       decoration: BoxDecoration(
@@ -231,14 +244,14 @@ class SettingsScreen extends StatelessWidget {
                             color: palette.text,
                           ),
                         ),
-                        trailing:
-                            _currentLanguage(context) == entry.key
-                                ? Icon(
-                                    Icons.check_circle_rounded,
-                                    color: palette.primary,
-                                    size: 21,
-                                  )
-                                : null,
+                        trailing: SettingsScreen._currentLanguage(context) ==
+                                entry.key
+                            ? Icon(
+                                Icons.check_circle_rounded,
+                                color: palette.primary,
+                                size: 21,
+                              )
+                            : null,
                         onTap: () async {
                           await easy.EasyLocalization.of(context)!
                               .setLocale(Locale(entry.key));

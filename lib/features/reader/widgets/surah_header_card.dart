@@ -3,6 +3,7 @@ import 'package:holy_quran/core/data/quran_models.dart';
 import 'package:holy_quran/core/theme/app_palette.dart';
 import 'package:holy_quran/core/theme/app_theme.dart';
 import 'package:quran/quran.dart' as quran;
+import 'package:easy_localization/easy_localization.dart' as easy;
 
 /// The ornamented plate that opens every surah in the reader.
 class SurahHeaderCard extends StatelessWidget {
@@ -62,13 +63,14 @@ class SurahHeaderCard extends StatelessWidget {
               ),
               const SizedBox(height: 14),
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 7),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 14, vertical: 7),
                 decoration: BoxDecoration(
                   color: Colors.white.withValues(alpha: 0.12),
                   borderRadius: BorderRadius.circular(999),
                 ),
                 child: Text(
-                  '${surah.isMakki ? 'Makkah' : 'Madinah'}  ·  ${surah.verseCount} verses  ·  Page ${surah.startPage}',
+                  '${surah.isMakki ? easy.tr('makkah') : easy.tr('madinah')}  ·  ${surah.verseCount} ${easy.tr('verses')}   ·  ${easy.tr('page')}  ${surah.startPage}',
                   style: TextStyle(
                     fontFamily: 'InterMedium',
                     fontSize: 11.5,

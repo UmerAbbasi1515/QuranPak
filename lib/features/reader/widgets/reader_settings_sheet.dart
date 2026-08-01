@@ -5,6 +5,7 @@ import 'package:holy_quran/core/theme/app_palette.dart';
 import 'package:holy_quran/core/theme/app_theme.dart';
 import 'package:holy_quran/features/settings/translation_picker.dart';
 import 'package:holy_quran/ui/widgets/list_tiles.dart';
+import 'package:easy_localization/easy_localization.dart' as easy;
 
 /// Quick reading controls: translation, text sizes and theme — all live, with
 /// a preview so the effect of a slider is visible while dragging.
@@ -30,7 +31,7 @@ Future<void> showReaderSettingsSheet(BuildContext context) {
                 children: [
                   const Center(child: SheetHandle()),
                   Text(
-                    'Reading settings',
+                    easy.tr('readingSettings'),
                     style: TextStyle(
                       fontFamily: 'InterSemibold',
                       fontSize: 17,
@@ -40,7 +41,7 @@ Future<void> showReaderSettingsSheet(BuildContext context) {
                   const SizedBox(height: 16),
                   _preview(context, prefs),
                   const SizedBox(height: 18),
-                  _rowLabel(context, 'Translation'),
+                  _rowLabel(context, easy.tr('translation')),
                   const SizedBox(height: 8),
                   InkWell(
                     onTap: () => showTranslationPicker(context),
@@ -84,7 +85,7 @@ Future<void> showReaderSettingsSheet(BuildContext context) {
                     activeColor: palette.onPrimary,
                     activeTrackColor: palette.primary,
                     title: Text(
-                      'Show translation',
+                      easy.tr('showTranslation'),
                       style: TextStyle(
                         fontFamily: 'InterMedium',
                         fontSize: 14,
@@ -94,7 +95,7 @@ Future<void> showReaderSettingsSheet(BuildContext context) {
                   ),
                   _slider(
                     context,
-                    label: 'Arabic size',
+                    label: easy.tr('arabicSize'),
                     value: prefs.arabicFontSize.value,
                     min: AppPrefs.minArabicFontSize,
                     max: AppPrefs.maxArabicFontSize,
@@ -102,17 +103,17 @@ Future<void> showReaderSettingsSheet(BuildContext context) {
                   ),
                   _slider(
                     context,
-                    label: 'Translation size',
+                    label: easy.tr('translationSize'),
                     value: prefs.translationFontSize.value,
                     min: AppPrefs.minTranslationFontSize,
                     max: AppPrefs.maxTranslationFontSize,
                     onChanged: prefs.setTranslationFontSize,
                   ),
                   const SizedBox(height: 12),
-                  _rowLabel(context, 'Appearance'),
+                  _rowLabel(context, easy.tr('appearance')),
                   const SizedBox(height: 8),
                   SegmentedTabs(
-                    labels: const ['System', 'Light', 'Dark'],
+                    labels:  [easy.tr('system'), easy.tr('light'), easy.tr('dark')],
                     selectedIndex: ThemeMode.values
                         .indexOf(prefs.themeMode.value)
                         .clamp(0, 2),
@@ -154,7 +155,7 @@ Widget _preview(BuildContext context, AppPrefs prefs) {
         if (prefs.showTranslation.value) ...[
           const SizedBox(height: 8),
           Text(
-            '[All] praise is [due] to Allah, Lord of the worlds.',
+            easy.tr('sampleVerse'),
             style: TextStyle(
               fontFamily: 'InterRegular',
               fontSize: prefs.translationFontSize.value,

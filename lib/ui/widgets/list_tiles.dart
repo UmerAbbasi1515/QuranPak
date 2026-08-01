@@ -4,6 +4,7 @@ import 'package:holy_quran/core/theme/app_palette.dart';
 import 'package:holy_quran/core/theme/app_theme.dart';
 import 'package:holy_quran/ui/widgets/app_card.dart';
 import 'package:holy_quran/ui/widgets/star_badge.dart';
+import 'package:easy_localization/easy_localization.dart' as easy;
 
 /// Row in the surah list: number star, transliteration + meta, Arabic name.
 class SurahTile extends StatelessWidget {
@@ -44,7 +45,7 @@ class SurahTile extends StatelessWidget {
                 ),
                 const SizedBox(height: 3),
                 Text(
-                  '${surah.isMakki ? 'Makkah' : 'Madinah'}  ·  ${surah.verseCount} verses',
+                  '${surah.isMakki ? easy.tr('makkah') : easy.tr('madinah')}  ·  ${surah.verseCount} ${easy.tr('verses')}',
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
@@ -105,7 +106,7 @@ class JuzTile extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Juz ${juz.number} · ${juz.englishName}',
+                  '${easy.tr('para')} ${juz.number} · ${juz.englishName}',
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
@@ -116,7 +117,7 @@ class JuzTile extends StatelessWidget {
                 ),
                 const SizedBox(height: 3),
                 Text(
-                  'Starts at $startSurahName ${juz.startSurah}:${juz.startVerse}',
+                  '${easy.tr('startsAt')}  $startSurahName ${juz.startSurah}:${juz.startVerse}',
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
@@ -256,9 +257,8 @@ class SegmentedTabs extends StatelessWidget {
                       fontFamily:
                           i == selectedIndex ? 'InterSemibold' : 'InterMedium',
                       fontSize: 13.5,
-                      color: i == selectedIndex
-                          ? palette.text
-                          : palette.textMuted,
+                      color:
+                          i == selectedIndex ? palette.text : palette.textMuted,
                     ),
                   ),
                 ),

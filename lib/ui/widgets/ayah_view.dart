@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:holy_quran/core/data/quran_models.dart';
 import 'package:holy_quran/core/theme/app_palette.dart';
 import 'package:holy_quran/core/theme/app_theme.dart';
+import 'package:easy_localization/easy_localization.dart' as easy;
 
 /// One verse: Arabic on top, translation underneath, with per-verse actions.
 ///
@@ -126,7 +127,7 @@ class AyahView extends StatelessWidget {
               borderRadius: BorderRadius.circular(999),
             ),
             child: Text(
-              'Sajdah',
+              easy.tr('sajdah'),
               style: TextStyle(
                 fontFamily: 'InterSemibold',
                 fontSize: 11.5,

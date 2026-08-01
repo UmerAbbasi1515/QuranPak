@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:holy_quran/core/data/quran_models.dart';
 import 'package:holy_quran/core/services/app_prefs.dart';
 import 'package:holy_quran/core/theme/app_palette.dart';
+import 'package:easy_localization/easy_localization.dart' as easy;
 
 /// Bottom sheet listing every translation the app can render.
 Future<void> showTranslationPicker(BuildContext context) {
@@ -27,7 +28,7 @@ Future<void> showTranslationPicker(BuildContext context) {
                 child: Row(
                   children: [
                     Text(
-                      'Translation',
+                      easy.tr('translation'),
                       style: TextStyle(
                         fontFamily: 'InterSemibold',
                         fontSize: 17,
@@ -36,7 +37,7 @@ Future<void> showTranslationPicker(BuildContext context) {
                     ),
                     const Spacer(),
                     Text(
-                      '${QuranTranslations.all.length} available',
+                      '${QuranTranslations.all.length} ${easy.tr('available')}',
                       style: TextStyle(
                         fontFamily: 'InterRegular',
                         fontSize: 12.5,
@@ -73,8 +74,9 @@ Future<void> showTranslationPicker(BuildContext context) {
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(14),
                           ),
-                          onTap: () {
+                          onTap: () async {
                             AppPrefs.to.setTranslation(option.id);
+
                             Navigator.of(context).pop();
                           },
                           title: Text(

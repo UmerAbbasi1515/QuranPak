@@ -10,6 +10,7 @@ import 'package:holy_quran/features/reader/reader_screen.dart';
 import 'package:holy_quran/ui/widgets/app_card.dart';
 import 'package:holy_quran/ui/widgets/ayah_view.dart';
 import 'package:holy_quran/ui/widgets/list_tiles.dart';
+import 'package:easy_localization/easy_localization.dart' as easy;
 
 /// Searches surah names and the full text of the selected translation.
 class SearchScreen extends StatefulWidget {
@@ -31,6 +32,7 @@ class _SearchScreenState extends State<SearchScreen> {
   List<SurahInfo> _surahHits = const [];
   List<Ayah> _verseHits = const [];
   bool _searching = false;
+  RxBool temp = false.obs;
 
   @override
   void dispose() {
@@ -98,7 +100,7 @@ class _SearchScreenState extends State<SearchScreen> {
             padding: const EdgeInsets.fromLTRB(20, 4, 20, 12),
             child: AppSearchField(
               controller: _controller,
-              hintText: 'Search surahs or words in the translation',
+              hintText: easy.tr('searchSurahsOrWords'),
               autofocus: true,
               onChanged: _onChanged,
             ),
@@ -111,12 +113,10 @@ class _SearchScreenState extends State<SearchScreen> {
 
   Widget _results(BuildContext context, AppPrefs prefs) {
     if (_query.isEmpty && !_searching) {
-      return const EmptyState(
+      return EmptyState(
         icon: Icons.search_rounded,
-        title: 'Search the Quran',
-        message:
-            'Look up a surah by name, or find every verse containing a word — '
-            'for example "mercy", "patience" or "light".',
+        title: easy.tr('searchTheQuran'),
+        message: easy.tr('searchTheQuranDescription'),
       );
     }
 
@@ -127,52 +127,52 @@ class _SearchScreenState extends State<SearchScreen> {
     if (_surahHits.isEmpty && _verseHits.isEmpty) {
       return EmptyState(
         icon: Icons.search_off_rounded,
-        title: 'No matches for "$_query"',
-        message:
-            'Verse search looks inside the translation you have selected in '
-            'settings.',
+        title: '${easy.tr('noMatchesFor')} "$_query"',
+        message: easy.tr('verseSearchNote'),
       );
     }
 
     return Obx(
-      () => ListView(
-        padding: const EdgeInsets.fromLTRB(20, 0, 20, 24),
-        children: [
-          if (_surahHits.isNotEmpty) ...[
-            const SectionHeader(title: 'Surahs'),
-            const SizedBox(height: 8),
-            for (final surah in _surahHits)
-              SurahTile(
-                surah: surah,
-                onTap: () => Get.to(
-                  () => ReaderScreen(surahNumber: surah.number),
-                  preventDuplicates: false,
-                ),
-              ),
-            const SizedBox(height: 8),
-          ],
-          if (_verseHits.isNotEmpty) ...[
-            SectionHeader(
-              title: _verseHits.length >= _verseResultLimit
-                  ? 'Verses (first $_verseResultLimit)'
-                  : 'Verses (${_verseHits.length})',
+      () => temp.value == true
+          ? SizedBox()
+          : ListView(
+              padding: const EdgeInsets.fromLTRB(20, 0, 20, 24),
+              children: [
+                if (_surahHits.isNotEmpty) ...[
+                  SectionHeader(title: easy.tr('Surah')),
+                  const SizedBox(height: 8),
+                  for (final surah in _surahHits)
+                    SurahTile(
+                      surah: surah,
+                      onTap: () => Get.to(
+                        () => ReaderScreen(surahNumber: surah.number),
+                        preventDuplicates: false,
+                      ),
+                    ),
+                  const SizedBox(height: 8),
+                ],
+                if (_verseHits.isNotEmpty) ...[
+                  SectionHeader(
+                    title: _verseHits.length >= _verseResultLimit
+                        ? '${easy.tr('verses')} (${easy.tr('first')} $_verseResultLimit)'
+                        : '${easy.tr('verses')} (${_verseHits.length})',
+                  ),
+                  const SizedBox(height: 8),
+                  for (final ayah in _verseHits)
+                    AyahView(
+                      ayah: ayah,
+                      arabicFontSize: prefs.arabicFontSize.value,
+                      translationFontSize: prefs.translationFontSize.value,
+                      showTranslation: true,
+                      translationIsRtl: prefs.translation.isRtl,
+                      isBookmarked: prefs.bookmarks.contains(ayah.key),
+                      subtitle: _repository.surah(ayah.surahNumber).englishName,
+                      onTap: () => _openVerse(ayah),
+                      onBookmark: () => prefs.toggleBookmark(ayah.key),
+                    ),
+                ],
+              ],
             ),
-            const SizedBox(height: 8),
-            for (final ayah in _verseHits)
-              AyahView(
-                ayah: ayah,
-                arabicFontSize: prefs.arabicFontSize.value,
-                translationFontSize: prefs.translationFontSize.value,
-                showTranslation: true,
-                translationIsRtl: prefs.translation.isRtl,
-                isBookmarked: prefs.bookmarks.contains(ayah.key),
-                subtitle: _repository.surah(ayah.surahNumber).englishName,
-                onTap: () => _openVerse(ayah),
-                onBookmark: () => prefs.toggleBookmark(ayah.key),
-              ),
-          ],
-        ],
-      ),
     );
   }
 }

@@ -35,10 +35,10 @@ class HomeScreen extends StatelessWidget {
       body: SafeArea(
         bottom: false,
         child: ListView(
-          padding: const EdgeInsets.fromLTRB(20, 8, 20, 24),
+          padding: const EdgeInsets.fromLTRB(20, 5, 20, 24),
           children: [
             _Greeting(onSearch: () => Get.to(() => const SearchScreen())),
-            const SizedBox(height: 18),
+            const SizedBox(height: 10),
             _ContinueReadingCard(repository: repository),
             const SizedBox(height: 18),
             _QuickActions(
@@ -49,8 +49,8 @@ class HomeScreen extends StatelessWidget {
             _VerseOfTheDay(repository: repository),
             const SizedBox(height: 22),
             SectionHeader(
-              title: 'Surahs',
-              actionLabel: 'See all',
+              title: easy.tr('surahsL'),
+              actionLabel: easy.tr('seeAll'),
               onAction: () => onOpenLibrary(0),
             ),
             const SizedBox(height: 10),
@@ -84,14 +84,6 @@ class _Greeting extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                'Assalamu alaikum',
-                style: TextStyle(
-                  fontFamily: 'InterRegular',
-                  fontSize: 13,
-                  color: palette.textMuted,
-                ),
-              ),
               const SizedBox(height: 2),
               Text(
                 easy.tr('app_name'),
@@ -106,7 +98,7 @@ class _Greeting extends StatelessWidget {
         ),
         IconButton(
           onPressed: onSearch,
-          tooltip: 'Search',
+          tooltip: easy.tr('search'),
           icon: Container(
             padding: const EdgeInsets.all(9),
             decoration: BoxDecoration(
@@ -169,7 +161,7 @@ class _ContinueReadingCard extends StatelessWidget {
                   const SizedBox(width: 8),
                   Text(
                     lastRead == null
-                        ? 'Start reading'
+                        ? easy.tr('start_reading')
                         : easy.tr('continue_reading'),
                     style: TextStyle(
                       fontFamily: 'InterMedium',
@@ -207,7 +199,7 @@ class _ContinueReadingCard extends StatelessWidget {
                         ),
                         const SizedBox(height: 3),
                         Text(
-                          'Verse $verseNumber  ·  ${easy.tr('juzz')} ${_juzOf(surahNumber, verseNumber)}  ·  ${easy.tr('page')} ${_pageOf(surahNumber, verseNumber)}',
+                          '${easy.tr('verse')}#  $verseNumber  ·  ${easy.tr('para')}# ${_juzOf(surahNumber, verseNumber)}  ·  ${easy.tr('page')}# ${_pageOf(surahNumber, verseNumber)}',
                           style: TextStyle(
                             fontFamily: 'InterRegular',
                             fontSize: 12.5,
@@ -245,11 +237,9 @@ class _ContinueReadingCard extends StatelessWidget {
     });
   }
 
-  int _juzOf(int surah, int verse) =>
-      repository.verseJuz(surah, verse);
+  int _juzOf(int surah, int verse) => repository.verseJuz(surah, verse);
 
-  int _pageOf(int surah, int verse) =>
-      repository.versePage(surah, verse);
+  int _pageOf(int surah, int verse) => repository.versePage(surah, verse);
 }
 
 class _QuickActions extends StatelessWidget {
@@ -268,13 +258,13 @@ class _QuickActions extends StatelessWidget {
     final actions = <_QuickAction>[
       _QuickAction(
         icon: Icons.menu_book_rounded,
-        label: 'Surahs',
+        label: easy.tr('surah'),
         color: palette.primary,
         onTap: () => onOpenLibrary(0),
       ),
       _QuickAction(
         icon: Icons.auto_stories_rounded,
-        label: 'Juz',
+        label: easy.tr('para'),
         color: palette.gold,
         onTap: () => onOpenLibrary(1),
       ),
@@ -370,7 +360,7 @@ class _VerseOfTheDay extends StatelessWidget {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const SectionHeader(title: 'Verse of the day'),
+          SectionHeader(title: easy.tr("verseOfTheDay")),
           const SizedBox(height: 10),
           AppCard(
             padding: const EdgeInsets.all(18),
@@ -385,13 +375,16 @@ class _VerseOfTheDay extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  ayah.arabic,
-                  textDirection: TextDirection.rtl,
-                  textAlign: TextAlign.right,
-                  style: AppTextStyles.arabic(
-                    color: palette.text,
-                    fontSize: prefs.arabicFontSize.value * 0.85,
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: Text(
+                    ayah.arabic,
+                    textDirection: TextDirection.rtl,
+                    textAlign: TextAlign.right,
+                    style: AppTextStyles.arabic(
+                      color: palette.text,
+                      fontSize: prefs.arabicFontSize.value * 0.85,
+                    ),
                   ),
                 ),
                 const SizedBox(height: 12),
@@ -416,7 +409,7 @@ class _VerseOfTheDay extends StatelessWidget {
                     ),
                     const Spacer(),
                     Text(
-                      'Read surah',
+                      easy.tr('readSurah'),
                       style: TextStyle(
                         fontFamily: 'InterMedium',
                         fontSize: 12.5,

@@ -56,6 +56,18 @@ class AppPalette {
 
   bool get isDark => brightness == Brightness.dark;
 
+  // LinearGradient get heroGradient => LinearGradient(
+  //       begin: Alignment.topLeft,
+  //       end: Alignment.bottomRight,
+  //       colors: isDark
+  //           ? const [Color(0xFF10403A), Color(0xFF0C302C), Color(0xFF0B2422)]
+  //           : const [Color(0xFF14796B), Color(0xFF0F5F55), Color(0xFF0C4A43)],
+  //     );
+
+  static const Color maroon = Color(0xFF4B1219);
+  static const Color darkRedTop = Color(0xFF2C060F);
+  static const Color darkRedMid = Color(0xFF490A15);
+  static const Color darkRedBottom = Color(0xFF23080D);
   LinearGradient get heroGradient => LinearGradient(
         begin: Alignment.topLeft,
         end: Alignment.bottomRight,
@@ -63,7 +75,16 @@ class AppPalette {
             ? const [Color(0xFF10403A), Color(0xFF0C302C), Color(0xFF0B2422)]
             : const [Color(0xFF14796B), Color(0xFF0F5F55), Color(0xFF0C4A43)],
       );
-
+  static const LinearGradient backgroundColor = LinearGradient(
+    begin: Alignment.topCenter,
+    end: Alignment.bottomCenter,
+    colors: [darkRedTop, darkRedMid, darkRedBottom],
+    stops: [
+      0.0,
+      0.596,
+      1.0
+    ], // approx position of -17.86%, 43.46%, 106.27% remapped to 0–1
+  );
   List<BoxShadow> get cardShadow => [
         BoxShadow(
           color: shadow,

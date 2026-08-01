@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:holy_quran/core/data/quran_models.dart';
 import 'package:holy_quran/core/data/quran_source.dart';

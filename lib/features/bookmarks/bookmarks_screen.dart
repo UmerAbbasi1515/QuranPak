@@ -61,8 +61,8 @@ class BookmarksScreen extends StatelessWidget {
                         style: TextButton.styleFrom(
                           foregroundColor: palette.textMuted,
                         ),
-                        child: const Text(
-                          'Clear all',
+                        child: Text(
+                          easy.tr('clearAll'),
                           style: TextStyle(
                             fontFamily: 'InterMedium',
                             fontSize: 13,
@@ -74,13 +74,10 @@ class BookmarksScreen extends StatelessWidget {
               ),
               Expanded(
                 child: ayahs.isEmpty
-                    ? const EmptyState(
+                    ? EmptyState(
                         icon: Icons.bookmark_border_rounded,
-                        title: 'No bookmarks yet',
-                        message:
-                            'Tap the bookmark icon on any verse while reading '
-                            'and it will show up here.',
-                      )
+                        title: easy.tr('noBookmarksYet'),
+                        message: easy.tr('noBookmarksDescription'))
                     : ListView.builder(
                         padding: const EdgeInsets.fromLTRB(20, 0, 20, 24),
                         itemCount: ayahs.length,
@@ -94,9 +91,8 @@ class BookmarksScreen extends StatelessWidget {
                             showTranslation: prefs.showTranslation.value,
                             translationIsRtl: option.isRtl,
                             isBookmarked: true,
-                            subtitle: repository
-                                .surah(ayah.surahNumber)
-                                .englishName,
+                            subtitle:
+                                repository.surah(ayah.surahNumber).englishName,
                             onBookmark: () => prefs.toggleBookmark(ayah.key),
                             onTap: () => Get.to(
                               () => ReaderScreen(
@@ -127,7 +123,7 @@ class BookmarksScreen extends StatelessWidget {
           borderRadius: BorderRadius.circular(22),
         ),
         title: Text(
-          'Remove all bookmarks?',
+          easy.tr('removeAllBookmarksTitle'),
           style: TextStyle(
             fontFamily: 'InterSemibold',
             fontSize: 17,
@@ -135,7 +131,7 @@ class BookmarksScreen extends StatelessWidget {
           ),
         ),
         content: Text(
-          'This cannot be undone.',
+          easy.tr('removeAllBookmarksDescription'),
           style: TextStyle(
             fontFamily: 'InterRegular',
             fontSize: 14,
@@ -149,7 +145,7 @@ class BookmarksScreen extends StatelessWidget {
           ),
           TextButton(
             onPressed: () => Navigator.of(context).pop(true),
-            child: const Text('Remove all'),
+            child:  Text(easy.tr('removeAll')),
           ),
         ],
       ),

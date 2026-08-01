@@ -11,6 +11,7 @@ import 'package:holy_quran/features/reader/widgets/reader_settings_sheet.dart';
 import 'package:holy_quran/features/reader/widgets/surah_header_card.dart';
 import 'package:holy_quran/ui/widgets/ayah_view.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
+import 'package:easy_localization/easy_localization.dart' as easy;
 
 /// Verse-by-verse reader: Arabic with the selected translation underneath,
 /// resuming wherever the reader was last left.
@@ -129,12 +130,14 @@ class _ReaderScreenState extends State<ReaderScreen> {
       ..write('— ${_surah.englishName} ${ayah.key} (${option.nativeLabel})');
 
     Clipboard.setData(ClipboardData(text: buffer.toString()));
-    _showSnack('Verse ${ayah.key} copied');
+    _showSnack('${easy.tr('verse')} ${ayah.key} ${easy.tr('copied')} ');
   }
 
   void _toggleBookmark(Ayah ayah) {
     final added = AppPrefs.to.toggleBookmark(ayah.key);
-    _showSnack(added ? 'Bookmarked ${ayah.key}' : 'Bookmark removed');
+    _showSnack(added
+        ? '${easy.tr('bookmarked')} ${ayah.key}'
+        : easy.tr('bookmarkRemoved'));
   }
 
   void _showSnack(String message) {
@@ -166,7 +169,7 @@ class _ReaderScreenState extends State<ReaderScreen> {
           children: [
             const Center(child: SizedBox(height: 8)),
             Text(
-              'Go to verse',
+              easy.tr('goToVerse'),
               style: TextStyle(
                 fontFamily: 'InterSemibold',
                 fontSize: 17,
@@ -175,7 +178,7 @@ class _ReaderScreenState extends State<ReaderScreen> {
             ),
             const SizedBox(height: 4),
             Text(
-              '${_surah.englishName} has ${_surah.verseCount} verses',
+              '${_surah.englishName} ${easy.tr('has')} ${_surah.verseCount} ${easy.tr('verses')}',
               style: TextStyle(
                 fontFamily: 'InterRegular',
                 fontSize: 13,
@@ -194,7 +197,7 @@ class _ReaderScreenState extends State<ReaderScreen> {
                 color: palette.text,
               ),
               decoration: InputDecoration(
-                hintText: 'Verse number',
+                hintText: easy.tr('verseNumber'),
                 filled: true,
                 fillColor: palette.surfaceAlt,
                 border: OutlineInputBorder(
@@ -251,7 +254,7 @@ class _ReaderScreenState extends State<ReaderScreen> {
             ValueListenableBuilder<int>(
               valueListenable: _currentVerse,
               builder: (context, verse, _) => Text(
-                'Verse $verse of ${_surah.verseCount}',
+                '${easy.tr('verse')} $verse ${easy.tr('of')}  ${_surah.verseCount}',
                 style: TextStyle(
                   fontFamily: 'InterRegular',
                   fontSize: 11.5,
@@ -263,12 +266,12 @@ class _ReaderScreenState extends State<ReaderScreen> {
         ),
         actions: [
           IconButton(
-            tooltip: 'Go to verse',
+            tooltip: easy.tr('goToVerse'),
             icon: const Icon(Icons.numbers_rounded),
             onPressed: _openJumpSheet,
           ),
           IconButton(
-            tooltip: 'Reading settings',
+            tooltip: easy.tr('readingSettings'),
             icon: const Icon(Icons.tune_rounded),
             onPressed: () => showReaderSettingsSheet(context),
           ),
@@ -357,7 +360,7 @@ class _ReaderBottomBar extends StatelessWidget {
             children: [
               _NavButton(
                 icon: Icons.chevron_left_rounded,
-                label: 'Previous',
+                label: easy.tr('previous'),
                 onTap: onPrevious,
               ),
               Expanded(
@@ -369,7 +372,7 @@ class _ReaderBottomBar extends StatelessWidget {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Text(
-                          '${(progress * 100).clamp(0, 100).round()}% of ${surah.englishName}',
+                          '${(progress * 100).clamp(0, 100).round()}% ${easy.tr('of')} ${surah.englishName}',
                           style: TextStyle(
                             fontFamily: 'InterMedium',
                             fontSize: 12,
@@ -383,8 +386,7 @@ class _ReaderBottomBar extends StatelessWidget {
                             value: progress.clamp(0.0, 1.0),
                             minHeight: 4,
                             backgroundColor: palette.surfaceAlt,
-                            valueColor:
-                                AlwaysStoppedAnimation(palette.primary),
+                            valueColor: AlwaysStoppedAnimation(palette.primary),
                           ),
                         ),
                       ],
@@ -394,7 +396,7 @@ class _ReaderBottomBar extends StatelessWidget {
               ),
               _NavButton(
                 icon: Icons.chevron_right_rounded,
-                label: 'Next',
+                label: easy.tr('next'),
                 onTap: onNext,
                 trailingIcon: true,
               ),

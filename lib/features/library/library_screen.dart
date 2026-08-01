@@ -7,6 +7,7 @@ import 'package:holy_quran/features/reader/reader_screen.dart';
 import 'package:holy_quran/features/search/search_screen.dart';
 import 'package:holy_quran/ui/widgets/app_card.dart';
 import 'package:holy_quran/ui/widgets/list_tiles.dart';
+import 'package:easy_localization/easy_localization.dart' as easy;
 
 /// Browse the Quran either by surah or by juz.
 class LibraryScreen extends StatefulWidget {
@@ -70,7 +71,7 @@ class _LibraryScreenState extends State<LibraryScreen> {
               child: Row(
                 children: [
                   Text(
-                    'The Quran',
+                    easy.tr('theQuran'),
                     style: TextStyle(
                       fontFamily: 'InterBold',
                       fontSize: 24,
@@ -79,7 +80,7 @@ class _LibraryScreenState extends State<LibraryScreen> {
                   ),
                   const Spacer(),
                   IconButton(
-                    tooltip: 'Search verses',
+                    tooltip: easy.tr('searchVerses'),
                     onPressed: () => Get.to(() => const SearchScreen()),
                     icon: Icon(
                       Icons.manage_search_rounded,
@@ -92,7 +93,7 @@ class _LibraryScreenState extends State<LibraryScreen> {
             Padding(
               padding: const EdgeInsets.fromLTRB(20, 4, 20, 12),
               child: SegmentedTabs(
-                labels: const ['Surah', 'Juz'],
+                labels:  [easy.tr('surah'), easy.tr('para')],
                 selectedIndex: _section.value,
                 onChanged: (index) => _section.value = index,
               ),
@@ -102,7 +103,7 @@ class _LibraryScreenState extends State<LibraryScreen> {
                 padding: const EdgeInsets.fromLTRB(20, 0, 20, 12),
                 child: AppSearchField(
                   controller: _searchController,
-                  hintText: 'Search surah name or number',
+                  hintText: easy.tr('searchSurahNameOrNumber'),
                   onChanged: _onSearchChanged,
                 ),
               ),
@@ -134,10 +135,10 @@ class _LibraryScreenState extends State<LibraryScreen> {
 
   Widget _surahList() {
     if (_surahs.isEmpty) {
-      return const EmptyState(
+      return  EmptyState(
         icon: Icons.search_off_rounded,
-        title: 'No surah found',
-        message: 'Try another name, for example "Yaseen" or "36".',
+        title: easy.tr('noSurahFound'),
+        message: easy.tr('tryAnotherNameExample'),
       );
     }
 
