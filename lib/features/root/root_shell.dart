@@ -1,6 +1,8 @@
 import 'package:easy_localization/easy_localization.dart' as easy;
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:holy_quran/core/theme/app_palette.dart';
+import 'package:holy_quran/features/ads_controller.dart';
 import 'package:holy_quran/features/bookmarks/bookmarks_screen.dart';
 import 'package:holy_quran/features/home/home_screen.dart';
 import 'package:holy_quran/features/library/library_screen.dart';
@@ -44,7 +46,12 @@ class _RootShellState extends State<RootShell> {
         children: [
           HomeScreen(
             onOpenLibrary: _openLibrary,
-            onOpenBookmarks: () => setState(() => _index = _bookmarksTab),
+            onOpenBookmarks: () {
+              MobileAdsController adsController =
+                  Get.put(MobileAdsController());
+              adsController.showInterstitialAd();
+              setState(() => _index = _bookmarksTab);
+            },
           ),
           LibraryScreen(section: _librarySection),
           const BookmarksScreen(),
@@ -53,7 +60,11 @@ class _RootShellState extends State<RootShell> {
       ),
       bottomNavigationBar: _BottomBar(
         index: _index,
-        onChanged: (index) => setState(() => _index = index),
+        onChanged: (index) {
+          MobileAdsController adsController = Get.put(MobileAdsController());
+          adsController.showInterstitialAd();
+          setState(() => _index = index);
+        },
       ),
     );
   }

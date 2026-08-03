@@ -6,6 +6,7 @@ import 'package:holy_quran/core/theme/app_palette.dart';
 import 'package:holy_quran/features/settings/translation_picker.dart';
 import 'package:holy_quran/ui/widgets/app_card.dart';
 import 'package:holy_quran/ui/widgets/list_tiles.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 /// App-wide preferences: reading, appearance and interface language.
 class SettingsScreen extends StatefulWidget {
@@ -148,13 +149,14 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   vertical: 6,
                 ),
                 child: _Row(
-                  icon: Icons.language_rounded,
-                  title: easy.tr('interfaceLanguage'),
-                  subtitle: SettingsScreen._appLanguages[
-                          SettingsScreen._currentLanguage(context)] ??
-                      SettingsScreen._currentLanguage(context),
-                  onTap: () => _pickAppLanguage(context),
-                ),
+                    icon: Icons.language_rounded,
+                    title: easy.tr('interfaceLanguage'),
+                    subtitle: SettingsScreen._appLanguages[
+                            SettingsScreen._currentLanguage(context)] ??
+                        SettingsScreen._currentLanguage(context),
+                    onTap: () async {
+                      _pickAppLanguage(context);
+                    }),
               ),
               const SizedBox(height: 22),
               SectionHeader(title: easy.tr('about')),
@@ -253,8 +255,23 @@ class _SettingsScreenState extends State<SettingsScreen> {
                               )
                             : null,
                         onTap: () async {
-                          await easy.EasyLocalization.of(context)!
-                              .setLocale(Locale(entry.key));
+                          final localization =
+                              easy.EasyLocalization.of(context);
+                          if (localization == null) {
+                            return;
+                          }
+                          await localization.setLocale(Locale(entry.key));
+
+                          final prefs = await SharedPreferences.getInstance();
+                          await prefs.setString('app_locale', entry.key);
+
+                          if (!mounted) {
+                            return;
+                          }
+
+                          setState(() {});
+                          Get.forceAppUpdate();
+
                           if (sheetContext.mounted) {
                             Navigator.of(sheetContext).pop();
                           }

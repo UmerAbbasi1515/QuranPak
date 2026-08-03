@@ -77,12 +77,14 @@ class _SearchScreenState extends State<SearchScreen> {
   }
 
   void _openVerse(Ayah ayah) {
-    Get.to(
-      () => ReaderScreen(
-        surahNumber: ayah.surahNumber,
-        initialVerse: ayah.verseNumber,
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => ReaderScreen(
+          surahNumber: ayah.surahNumber,
+          initialVerse: ayah.verseNumber,
+        ),
       ),
-      preventDuplicates: false,
     );
   }
 
@@ -144,10 +146,16 @@ class _SearchScreenState extends State<SearchScreen> {
                   for (final surah in _surahHits)
                     SurahTile(
                       surah: surah,
-                      onTap: () => Get.to(
-                        () => ReaderScreen(surahNumber: surah.number),
-                        preventDuplicates: false,
-                      ),
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ReaderScreen(
+                              surahNumber: surah.number,
+                            ),
+                          ),
+                        );
+                      },
                     ),
                   const SizedBox(height: 8),
                 ],

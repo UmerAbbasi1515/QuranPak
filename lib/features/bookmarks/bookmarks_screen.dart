@@ -94,13 +94,17 @@ class BookmarksScreen extends StatelessWidget {
                             subtitle:
                                 repository.surah(ayah.surahNumber).englishName,
                             onBookmark: () => prefs.toggleBookmark(ayah.key),
-                            onTap: () => Get.to(
-                              () => ReaderScreen(
-                                surahNumber: ayah.surahNumber,
-                                initialVerse: ayah.verseNumber,
-                              ),
-                              preventDuplicates: false,
-                            ),
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => ReaderScreen(
+                                    surahNumber: ayah.surahNumber,
+                                    initialVerse: ayah.verseNumber,
+                                  ),
+                                ),
+                              );
+                            },
                           );
                         },
                       ),
@@ -145,7 +149,7 @@ class BookmarksScreen extends StatelessWidget {
           ),
           TextButton(
             onPressed: () => Navigator.of(context).pop(true),
-            child:  Text(easy.tr('removeAll')),
+            child: Text(easy.tr('removeAll')),
           ),
         ],
       ),

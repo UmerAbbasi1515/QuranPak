@@ -5,6 +5,7 @@ import 'package:holy_quran/core/data/quran_repository.dart';
 import 'package:holy_quran/core/services/app_prefs.dart';
 import 'package:holy_quran/core/theme/app_palette.dart';
 import 'package:holy_quran/core/theme/app_theme.dart';
+import 'package:holy_quran/features/ads_controller.dart';
 import 'package:holy_quran/features/reader/reader_screen.dart';
 import 'package:holy_quran/features/search/search_screen.dart';
 import 'package:holy_quran/ui/widgets/app_card.dart';
@@ -13,7 +14,7 @@ import 'package:holy_quran/ui/widgets/star_badge.dart';
 
 /// Landing tab: where you left off, quick entry points and a verse for today.
 class HomeScreen extends StatelessWidget {
-  const HomeScreen({
+  HomeScreen({
     super.key,
     required this.onOpenLibrary,
     required this.onOpenBookmarks,
@@ -25,6 +26,7 @@ class HomeScreen extends StatelessWidget {
   /// Opens the bookmarks tab.
   final VoidCallback onOpenBookmarks;
 
+  final MobileAdsController adsController = Get.put(MobileAdsController());
   @override
   Widget build(BuildContext context) {
     final palette = context.palette;
@@ -37,31 +39,52 @@ class HomeScreen extends StatelessWidget {
         child: ListView(
           padding: const EdgeInsets.fromLTRB(20, 5, 20, 24),
           children: [
-            _Greeting(onSearch: () => Get.to(() => const SearchScreen())),
+            _Greeting(onSearch: () {
+              adsController.showInterstitialAd();
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const SearchScreen(),
+                ),
+              );
+            }),
             const SizedBox(height: 10),
-            _ContinueReadingCard(repository: repository),
+            _ContinueReadingCard(
+              repository: repository,
+              adsController: adsController,
+            ),
             const SizedBox(height: 18),
             _QuickActions(
               onOpenLibrary: onOpenLibrary,
               onOpenBookmarks: onOpenBookmarks,
+              adsController: adsController,
             ),
             const SizedBox(height: 22),
-            _VerseOfTheDay(repository: repository),
+            _VerseOfTheDay(
+              repository: repository,
+              adsController: adsController,
+            ),
             const SizedBox(height: 22),
             SectionHeader(
               title: easy.tr('surahsL'),
               actionLabel: easy.tr('seeAll'),
-              onAction: () => onOpenLibrary(0),
+              onAction: () {
+                adsController.showInterstitialAd();
+                onOpenLibrary(0);
+              },
             ),
             const SizedBox(height: 10),
-            for (final surah in repository.surahs.take(6))
+            for (final surah in repository.surahs.take(3))
               SurahTile(
-                surah: surah,
-                onTap: () => Get.to(
-                  () => ReaderScreen(surahNumber: surah.number),
-                  preventDuplicates: false,
-                ),
-              ),
+                  surah: surah,
+                  onTap: () {
+                    adsController.showInterstitialAd();
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                ReaderScreen(surahNumber: surah.number)));
+                  }),
           ],
         ),
       ),
@@ -116,10 +139,12 @@ class _Greeting extends StatelessWidget {
 
 /// Hero card that resumes the last reading position.
 class _ContinueReadingCard extends StatelessWidget {
-  const _ContinueReadingCard({required this.repository});
+  const _ContinueReadingCard(
+      {required this.repository, required this.adsController});
 
   final QuranRepository repository;
 
+  final MobileAdsController adsController;
   @override
   Widget build(BuildContext context) {
     final palette = context.palette;
@@ -132,13 +157,16 @@ class _ContinueReadingCard extends StatelessWidget {
       final progress = verseNumber / surah.verseCount;
 
       return GestureDetector(
-        onTap: () => Get.to(
-          () => ReaderScreen(
-            surahNumber: surahNumber,
-            initialVerse: verseNumber,
-          ),
-          preventDuplicates: false,
-        ),
+        onTap: () {
+          adsController.showInterstitialAd();
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => ReaderScreen(
+                  surahNumber: surahNumber, initialVerse: verseNumber),
+            ),
+          );
+        },
         child: Container(
           padding: const EdgeInsets.all(20),
           decoration: BoxDecoration(
@@ -246,10 +274,12 @@ class _QuickActions extends StatelessWidget {
   const _QuickActions({
     required this.onOpenLibrary,
     required this.onOpenBookmarks,
+    required this.adsController,
   });
 
   final ValueChanged<int> onOpenLibrary;
   final VoidCallback onOpenBookmarks;
+  final MobileAdsController adsController;
 
   @override
   Widget build(BuildContext context) {
@@ -260,25 +290,40 @@ class _QuickActions extends StatelessWidget {
         icon: Icons.menu_book_rounded,
         label: easy.tr('surah'),
         color: palette.primary,
-        onTap: () => onOpenLibrary(0),
+        onTap: () {
+          adsController.showInterstitialAd();
+          onOpenLibrary(0);
+        },
       ),
       _QuickAction(
         icon: Icons.auto_stories_rounded,
         label: easy.tr('para'),
         color: palette.gold,
-        onTap: () => onOpenLibrary(1),
+        onTap: () {
+          adsController.showInterstitialAd();
+          onOpenLibrary(1);
+        },
       ),
       _QuickAction(
         icon: Icons.bookmark_rounded,
         label: easy.tr('bookmark'),
         color: palette.primary,
-        onTap: onOpenBookmarks,
+        onTap: () {
+          adsController.showInterstitialAd();
+          onOpenBookmarks;
+        },
       ),
       _QuickAction(
         icon: Icons.search_rounded,
         label: easy.tr('search'),
         color: palette.gold,
-        onTap: () => Get.to(() => const SearchScreen()),
+        onTap: () {
+          adsController.showInterstitialAd();
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const SearchScreen()),
+          );
+        },
       ),
     ];
 
@@ -344,9 +389,10 @@ class _QuickAction extends StatelessWidget {
 
 /// A verse that stays the same for the whole day, with its translation.
 class _VerseOfTheDay extends StatelessWidget {
-  const _VerseOfTheDay({required this.repository});
+  const _VerseOfTheDay({required this.repository, required this.adsController});
 
   final QuranRepository repository;
+  final MobileAdsController adsController;
 
   @override
   Widget build(BuildContext context) {
@@ -365,13 +411,18 @@ class _VerseOfTheDay extends StatelessWidget {
           AppCard(
             padding: const EdgeInsets.all(18),
             radius: 22,
-            onTap: () => Get.to(
-              () => ReaderScreen(
-                surahNumber: ayah.surahNumber,
-                initialVerse: ayah.verseNumber,
-              ),
-              preventDuplicates: false,
-            ),
+            onTap: () {
+              adsController.showInterstitialAd();
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => ReaderScreen(
+                    surahNumber: ayah.surahNumber,
+                    initialVerse: ayah.verseNumber,
+                  ),
+                ),
+              );
+            },
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [

@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:holy_quran/core/data/quran_models.dart';
 import 'package:holy_quran/core/data/quran_repository.dart';
 import 'package:holy_quran/core/theme/app_palette.dart';
+import 'package:holy_quran/features/ads_controller.dart';
 import 'package:holy_quran/features/reader/reader_screen.dart';
 import 'package:holy_quran/features/search/search_screen.dart';
 import 'package:holy_quran/ui/widgets/app_card.dart';
@@ -45,13 +46,18 @@ class _LibraryScreenState extends State<LibraryScreen> {
   void _onSectionChanged() => setState(() {});
 
   void _onSearchChanged(String value) {
+    MobileAdsController adsController = Get.put(MobileAdsController());
+    adsController.showInterstitialAd();
     setState(() => _surahs = _repository.searchSurahs(value));
   }
 
   void _openSurah(int surahNumber, {int? verse}) {
-    Get.to(
-      () => ReaderScreen(surahNumber: surahNumber, initialVerse: verse),
-      preventDuplicates: false,
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) =>
+            ReaderScreen(surahNumber: surahNumber, initialVerse: verse),
+      ),
     );
   }
 
@@ -81,7 +87,13 @@ class _LibraryScreenState extends State<LibraryScreen> {
                   const Spacer(),
                   IconButton(
                     tooltip: easy.tr('searchVerses'),
-                    onPressed: () => Get.to(() => const SearchScreen()),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const SearchScreen()),
+                      );
+                    },
                     icon: Icon(
                       Icons.manage_search_rounded,
                       color: palette.text,
@@ -93,10 +105,14 @@ class _LibraryScreenState extends State<LibraryScreen> {
             Padding(
               padding: const EdgeInsets.fromLTRB(20, 4, 20, 12),
               child: SegmentedTabs(
-                labels:  [easy.tr('surah'), easy.tr('para')],
-                selectedIndex: _section.value,
-                onChanged: (index) => _section.value = index,
-              ),
+                  labels: [easy.tr('surah'), easy.tr('para')],
+                  selectedIndex: _section.value,
+                  onChanged: (index) {
+                    MobileAdsController adsController =
+                        Get.put(MobileAdsController());
+                    adsController.showInterstitialAd();
+                    _section.value = index;
+                  }),
             ),
             if (_section.value == 0)
               Padding(
@@ -116,14 +132,18 @@ class _LibraryScreenState extends State<LibraryScreen> {
                       itemBuilder: (context, index) {
                         final juz = juzs[index];
                         return JuzTile(
-                          juz: juz,
-                          startSurahName:
-                              _repository.surah(juz.startSurah).englishName,
-                          onTap: () => _openSurah(
-                            juz.startSurah,
-                            verse: juz.startVerse,
-                          ),
-                        );
+                            juz: juz,
+                            startSurahName:
+                                _repository.surah(juz.startSurah).englishName,
+                            onTap: () {
+                              MobileAdsController adsController =
+                                  Get.put(MobileAdsController());
+                              adsController.showInterstitialAd();
+                              _openSurah(
+                                juz.startSurah,
+                                verse: juz.startVerse,
+                              );
+                            });
                       },
                     ),
             ),
@@ -135,7 +155,7 @@ class _LibraryScreenState extends State<LibraryScreen> {
 
   Widget _surahList() {
     if (_surahs.isEmpty) {
-      return  EmptyState(
+      return EmptyState(
         icon: Icons.search_off_rounded,
         title: easy.tr('noSurahFound'),
         message: easy.tr('tryAnotherNameExample'),
@@ -148,9 +168,13 @@ class _LibraryScreenState extends State<LibraryScreen> {
       itemBuilder: (context, index) {
         final surah = _surahs[index];
         return SurahTile(
-          surah: surah,
-          onTap: () => _openSurah(surah.number),
-        );
+            surah: surah,
+            onTap: () {
+              MobileAdsController adsController =
+                  Get.put(MobileAdsController());
+              adsController.showInterstitialAd();
+              _openSurah(surah.number);
+            });
       },
     );
   }

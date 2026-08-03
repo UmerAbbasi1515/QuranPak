@@ -3,10 +3,12 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:holy_quran/core/data/quran_models.dart';
 import 'package:holy_quran/core/data/quran_repository.dart';
 import 'package:holy_quran/core/services/app_prefs.dart';
 import 'package:holy_quran/core/theme/app_palette.dart';
+import 'package:holy_quran/features/ads_controller.dart';
 import 'package:holy_quran/features/reader/widgets/reader_settings_sheet.dart';
 import 'package:holy_quran/features/reader/widgets/surah_header_card.dart';
 import 'package:holy_quran/ui/widgets/ayah_view.dart';
@@ -45,10 +47,13 @@ class _ReaderScreenState extends State<ReaderScreen> {
   int? _highlightedVerse;
   Timer? _saveDebounce;
   Timer? _highlightTimer;
+  MobileAdsController adsController = Get.put(MobileAdsController());
 
   @override
   void initState() {
     super.initState();
+    adsController.loadBannerAd();
+    adsController.loadInterstitialAd();
     _surah = _repository.surah(widget.surahNumber);
 
     final startVerse = (widget.initialVerse ?? 1).clamp(1, _surah.verseCount);
@@ -79,6 +84,7 @@ class _ReaderScreenState extends State<ReaderScreen> {
     _saveDebounce?.cancel();
     _highlightTimer?.cancel();
     _currentVerse.dispose();
+    adsController.bannerAd?.dispose();
     super.dispose();
   }
 
@@ -235,98 +241,111 @@ class _ReaderScreenState extends State<ReaderScreen> {
     final palette = context.palette;
 
     return Scaffold(
-      backgroundColor: palette.background,
-      appBar: AppBar(
-        centerTitle: false,
-        titleSpacing: 0,
-        title: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              _surah.englishName,
-              style: TextStyle(
-                fontFamily: 'InterSemibold',
-                fontSize: 16,
-                color: palette.text,
-              ),
-            ),
-            ValueListenableBuilder<int>(
-              valueListenable: _currentVerse,
-              builder: (context, verse, _) => Text(
-                '${easy.tr('verse')} $verse ${easy.tr('of')}  ${_surah.verseCount}',
+        backgroundColor: palette.background,
+        appBar: AppBar(
+          centerTitle: false,
+          titleSpacing: 0,
+          title: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                _surah.englishName,
                 style: TextStyle(
-                  fontFamily: 'InterRegular',
-                  fontSize: 11.5,
-                  color: palette.textMuted,
+                  fontFamily: 'InterSemibold',
+                  fontSize: 16,
+                  color: palette.text,
                 ),
               ),
+              ValueListenableBuilder<int>(
+                valueListenable: _currentVerse,
+                builder: (context, verse, _) => Text(
+                  '${easy.tr('verse')} $verse ${easy.tr('of')}  ${_surah.verseCount}',
+                  style: TextStyle(
+                    fontFamily: 'InterRegular',
+                    fontSize: 11.5,
+                    color: palette.textMuted,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          actions: [
+            IconButton(
+              tooltip: easy.tr('goToVerse'),
+              icon: const Icon(Icons.numbers_rounded),
+              onPressed: _openJumpSheet,
             ),
+            IconButton(
+              tooltip: easy.tr('readingSettings'),
+              icon: const Icon(Icons.tune_rounded),
+              onPressed: () => showReaderSettingsSheet(context),
+            ),
+            const SizedBox(width: 4),
           ],
         ),
-        actions: [
-          IconButton(
-            tooltip: easy.tr('goToVerse'),
-            icon: const Icon(Icons.numbers_rounded),
-            onPressed: _openJumpSheet,
-          ),
-          IconButton(
-            tooltip: easy.tr('readingSettings'),
-            icon: const Icon(Icons.tune_rounded),
-            onPressed: () => showReaderSettingsSheet(context),
-          ),
-          const SizedBox(width: 4),
-        ],
-      ),
-      body: Obx(() {
-        final prefs = AppPrefs.to;
-        final option = prefs.translation;
-        final ayahs = _repository.versesOfSurah(widget.surahNumber, option);
+        body: Obx(() {
+          final prefs = AppPrefs.to;
+          final option = prefs.translation;
+          final ayahs = _repository.versesOfSurah(widget.surahNumber, option);
 
-        // Referenced so Obx rebuilds the list when a bookmark is toggled.
-        final bookmarks = prefs.bookmarks;
+          // Referenced so Obx rebuilds the list when a bookmark is toggled.
+          final bookmarks = prefs.bookmarks;
 
-        return ScrollablePositionedList.builder(
-          itemScrollController: _itemScrollController,
-          itemPositionsListener: _positionsListener,
-          initialScrollIndex: _initialIndex,
-          initialAlignment: _initialIndex == 0 ? 0 : 0.06,
-          padding: const EdgeInsets.fromLTRB(16, 8, 16, 28),
-          itemCount: ayahs.length + 1,
-          itemBuilder: (context, index) {
-            if (index == 0) {
-              return SurahHeaderCard(
-                surah: _surah,
+          return ScrollablePositionedList.builder(
+            itemScrollController: _itemScrollController,
+            itemPositionsListener: _positionsListener,
+            initialScrollIndex: _initialIndex,
+            initialAlignment: _initialIndex == 0 ? 0 : 0.06,
+            padding: const EdgeInsets.fromLTRB(16, 8, 16, 28),
+            itemCount: ayahs.length + 1,
+            itemBuilder: (context, index) {
+              if (index == 0) {
+                return SurahHeaderCard(
+                  surah: _surah,
+                  arabicFontSize: prefs.arabicFontSize.value,
+                );
+              }
+
+              final ayah = ayahs[index - 1];
+              return AyahView(
+                ayah: ayah,
                 arabicFontSize: prefs.arabicFontSize.value,
+                translationFontSize: prefs.translationFontSize.value,
+                showTranslation: prefs.showTranslation.value,
+                translationIsRtl: option.isRtl,
+                isBookmarked: bookmarks.contains(ayah.key),
+                highlighted: _highlightedVerse == ayah.verseNumber,
+                onBookmark: () => _toggleBookmark(ayah),
+                onCopy: () => _copyAyah(ayah),
               );
-            }
-
-            final ayah = ayahs[index - 1];
-            return AyahView(
-              ayah: ayah,
-              arabicFontSize: prefs.arabicFontSize.value,
-              translationFontSize: prefs.translationFontSize.value,
-              showTranslation: prefs.showTranslation.value,
-              translationIsRtl: option.isRtl,
-              isBookmarked: bookmarks.contains(ayah.key),
-              highlighted: _highlightedVerse == ayah.verseNumber,
-              onBookmark: () => _toggleBookmark(ayah),
-              onCopy: () => _copyAyah(ayah),
-            );
-          },
-        );
-      }),
-      bottomNavigationBar: _ReaderBottomBar(
-        surah: _surah,
-        currentVerse: _currentVerse,
-        onPrevious: widget.surahNumber > 1
-            ? () => _openSurah(widget.surahNumber - 1)
-            : null,
-        onNext: widget.surahNumber < QuranRepository.surahCount
-            ? () => _openSurah(widget.surahNumber + 1)
-            : null,
-      ),
-    );
+            },
+          );
+        }),
+        bottomNavigationBar: Obx(
+          () => Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              if (adsController.isBannerLoaded.value &&
+                  adsController.bannerAd != null)
+                SizedBox(
+                  width: adsController.bannerAd!.size.width.toDouble(),
+                  height: adsController.bannerAd!.size.height.toDouble(),
+                  child: AdWidget(ad: adsController.bannerAd!),
+                ),
+              _ReaderBottomBar(
+                surah: _surah,
+                currentVerse: _currentVerse,
+                onPrevious: widget.surahNumber > 1
+                    ? () => _openSurah(widget.surahNumber - 1)
+                    : null,
+                onNext: widget.surahNumber < QuranRepository.surahCount
+                    ? () => _openSurah(widget.surahNumber + 1)
+                    : null,
+              ),
+            ],
+          ),
+        ));
   }
 }
 
