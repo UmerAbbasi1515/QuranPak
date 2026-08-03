@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:holy_quran/core/data/quran_models.dart';
 import 'package:holy_quran/core/data/quran_repository.dart';
 import 'package:holy_quran/core/theme/app_palette.dart';
@@ -29,9 +30,13 @@ class _LibraryScreenState extends State<LibraryScreen> {
       widget.section ?? ValueNotifier<int>(0);
   late List<SurahInfo> _surahs = _repository.surahs;
 
+  MobileAdsController adsController = Get.put(MobileAdsController());
+
   @override
   void initState() {
     super.initState();
+    adsController.loadBannerAd();
+    adsController.loadInterstitialAd();
     _section.addListener(_onSectionChanged);
   }
 
@@ -40,14 +45,13 @@ class _LibraryScreenState extends State<LibraryScreen> {
     _section.removeListener(_onSectionChanged);
     if (widget.section == null) _section.dispose();
     _searchController.dispose();
+    adsController.dispose();
     super.dispose();
   }
 
   void _onSectionChanged() => setState(() {});
 
   void _onSearchChanged(String value) {
-    MobileAdsController adsController = Get.put(MobileAdsController());
-    adsController.showInterstitialAd();
     setState(() => _surahs = _repository.searchSurahs(value));
   }
 
@@ -67,90 +71,97 @@ class _LibraryScreenState extends State<LibraryScreen> {
     final juzs = _repository.juzs;
 
     return Scaffold(
-      backgroundColor: palette.background,
-      body: SafeArea(
-        bottom: false,
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.fromLTRB(20, 8, 20, 0),
-              child: Row(
-                children: [
-                  Text(
-                    easy.tr('theQuran'),
-                    style: TextStyle(
-                      fontFamily: 'InterBold',
-                      fontSize: 24,
-                      color: palette.text,
-                    ),
-                  ),
-                  const Spacer(),
-                  IconButton(
-                    tooltip: easy.tr('searchVerses'),
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const SearchScreen()),
-                      );
-                    },
-                    icon: Icon(
-                      Icons.manage_search_rounded,
-                      color: palette.text,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(20, 4, 20, 12),
-              child: SegmentedTabs(
-                  labels: [easy.tr('surah'), easy.tr('para')],
-                  selectedIndex: _section.value,
-                  onChanged: (index) {
-                    MobileAdsController adsController =
-                        Get.put(MobileAdsController());
-                    adsController.showInterstitialAd();
-                    _section.value = index;
-                  }),
-            ),
-            if (_section.value == 0)
+        backgroundColor: palette.background,
+        body: SafeArea(
+          bottom: false,
+          child: Column(
+            children: [
               Padding(
-                padding: const EdgeInsets.fromLTRB(20, 0, 20, 12),
-                child: AppSearchField(
-                  controller: _searchController,
-                  hintText: easy.tr('searchSurahNameOrNumber'),
-                  onChanged: _onSearchChanged,
+                padding: const EdgeInsets.fromLTRB(20, 8, 20, 0),
+                child: Row(
+                  children: [
+                    Text(
+                      easy.tr('theQuran'),
+                      style: TextStyle(
+                        fontFamily: 'InterBold',
+                        fontSize: 24,
+                        color: palette.text,
+                      ),
+                    ),
+                    const Spacer(),
+                    IconButton(
+                      tooltip: easy.tr('searchVerses'),
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const SearchScreen()),
+                        );
+                      },
+                      icon: Icon(
+                        Icons.manage_search_rounded,
+                        color: palette.text,
+                      ),
+                    ),
+                  ],
                 ),
               ),
-            Expanded(
-              child: _section.value == 0
-                  ? _surahList()
-                  : ListView.builder(
-                      padding: const EdgeInsets.fromLTRB(20, 0, 20, 24),
-                      itemCount: juzs.length,
-                      itemBuilder: (context, index) {
-                        final juz = juzs[index];
-                        return JuzTile(
-                            juz: juz,
-                            startSurahName:
-                                _repository.surah(juz.startSurah).englishName,
-                            onTap: () {
-                              MobileAdsController adsController =
-                                  Get.put(MobileAdsController());
-                              adsController.showInterstitialAd();
-                              _openSurah(
-                                juz.startSurah,
-                                verse: juz.startVerse,
-                              );
-                            });
-                      },
-                    ),
-            ),
-          ],
+              Padding(
+                padding: const EdgeInsets.fromLTRB(20, 4, 20, 12),
+                child: SegmentedTabs(
+                    labels: [easy.tr('surah'), easy.tr('para')],
+                    selectedIndex: _section.value,
+                    onChanged: (index) {
+                      _section.value = index;
+                    }),
+              ),
+              if (_section.value == 0)
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(20, 0, 20, 12),
+                  child: AppSearchField(
+                    controller: _searchController,
+                    hintText: easy.tr('searchSurahNameOrNumber'),
+                    onChanged: _onSearchChanged,
+                  ),
+                ),
+              Expanded(
+                child: _section.value == 0
+                    ? _surahList()
+                    : ListView.builder(
+                        padding: const EdgeInsets.fromLTRB(20, 0, 20, 24),
+                        itemCount: juzs.length,
+                        itemBuilder: (context, index) {
+                          final juz = juzs[index];
+                          return JuzTile(
+                              juz: juz,
+                              startSurahName:
+                                  _repository.surah(juz.startSurah).englishName,
+                              onTap: () {
+                                _openSurah(
+                                  juz.startSurah,
+                                  verse: juz.startVerse,
+                                );
+                              });
+                        },
+                      ),
+              ),
+            ],
+          ),
         ),
-      ),
-    );
+        bottomNavigationBar: Obx(
+          () => Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              if (adsController.isBannerLoaded.value &&
+                  adsController.bannerAd != null)
+                SizedBox(
+                  width: adsController.bannerAd!.size.width.toDouble(),
+                  height: adsController.bannerAd!.size.height.toDouble(),
+                  child: AdWidget(ad: adsController.bannerAd!),
+                ),
+            ],
+          ),
+        ));
   }
 
   Widget _surahList() {
@@ -170,9 +181,6 @@ class _LibraryScreenState extends State<LibraryScreen> {
         return SurahTile(
             surah: surah,
             onTap: () {
-              MobileAdsController adsController =
-                  Get.put(MobileAdsController());
-              adsController.showInterstitialAd();
               _openSurah(surah.number);
             });
       },
